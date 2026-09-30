@@ -1,0 +1,854 @@
+{
+  "name": "Eastside Eats Command",
+  "description": "23 scouted restaurants, cafes and tea shops in Bellevue, WA and the surrounding Eastside.",
+  "center": {
+    "city": "Bellevue, WA",
+    "lat": 47.6101,
+    "lon": -122.2015
+  },
+  "generated": "2026-09-29",
+  "count": 25,
+  "categories": {
+    "DUMP": {
+      "name": "Dumplings & Buns",
+      "color": "#ffa62b"
+    },
+    "NOOD": {
+      "name": "Noodle Houses",
+      "color": "#ff7043"
+    },
+    "SUSHI": {
+      "name": "Sushi & Poke",
+      "color": "#3ad7ff"
+    },
+    "GRILL": {
+      "name": "Grill & BBQ",
+      "color": "#ff5540"
+    },
+    "BOBA": {
+      "name": "Boba & Tea",
+      "color": "#b98cff"
+    },
+    "COFF": {
+      "name": "Coffee",
+      "color": "#c79a6b"
+    },
+    "BAKE": {
+      "name": "Bakery & Sweets",
+      "color": "#ffd7e0"
+    },
+    "ST": {
+      "name": "Street Eats",
+      "color": "#5dff9f"
+    },
+    "ME": {
+      "name": "Middle Eastern",
+      "color": "#f2c14e"
+    },
+    "IND": {
+      "name": "Indian",
+      "color": "#ff9ecb"
+    },
+    "BUF": {
+      "name": "Buffet & AYCE",
+      "color": "#7cf5d8"
+    }
+  },
+  "sectors": {
+    "DT": {
+      "name": "Bellevue Downtown",
+      "drive": "0–5 min"
+    },
+    "FAC": {
+      "name": "Factoria",
+      "drive": "~8 min"
+    },
+    "BR": {
+      "name": "Bel-Red",
+      "drive": "~9 min"
+    },
+    "KIRK": {
+      "name": "Kirkland",
+      "drive": "~15 min"
+    },
+    "RED": {
+      "name": "Redmond",
+      "drive": "~18 min"
+    },
+    "REN": {
+      "name": "Renton",
+      "drive": "~18 min"
+    },
+    "KENT": {
+      "name": "Kent",
+      "drive": "~25 min"
+    }
+  },
+  "priceTiers": {
+    "1": {
+      "label": "$",
+      "range": "Under $15"
+    },
+    "2": {
+      "label": "$$",
+      "range": "$15-30"
+    },
+    "3": {
+      "label": "$$$",
+      "range": "$30-60"
+    }
+  },
+  "restaurants": [
+    {
+      "id": "doughzone",
+      "name": "Dough Zone Dumpling House",
+      "category": "DUMP",
+      "categoryName": "Dumplings & Buns",
+      "sector": "DT",
+      "sectorName": "Bellevue Downtown",
+      "driveFromDowntownBellevue": "0–5 min",
+      "priceTier": 2,
+      "price": "$$",
+      "priceRange": "$15-30",
+      "primarilyDrinks": false,
+      "address": "10300 Main St, Suite E, Bellevue",
+      "lat": 47.61021,
+      "lon": -122.20274,
+      "description": "The one that started it all — right here in Bellevue in 2014, before it spread down the entire West Coast. Fast, loud, always a wait, always worth it.",
+      "recommendedOrders": [
+        "Q-Bao (pan-fried pork buns)",
+        "Pork xiao long bao",
+        "Zha jiang noodles",
+        "Green onion pancake"
+      ],
+      "tags": [
+        "Chinese",
+        "Soup Dumplings",
+        "Group",
+        "Local Origin"
+      ],
+      "notes": "Founded 2014 by Jason & Nancy Zhai. Now operating in WA, OR, CA and TX. The old Crossroads branch has closed — this Main St location is the downtown one."
+    },
+    {
+      "id": "mecrepe",
+      "name": "Me + Crêpe",
+      "category": "ST",
+      "categoryName": "Street Eats",
+      "sector": "DT",
+      "sectorName": "Bellevue Downtown",
+      "driveFromDowntownBellevue": "0–5 min",
+      "priceTier": 1,
+      "price": "$",
+      "priceRange": "Under $15",
+      "primarilyDrinks": false,
+      "address": "2033 Bellevue Square, 2nd floor, Bellevue",
+      "lat": 47.6157,
+      "lon": -122.2013,
+      "description": "A tiny jianbing counter hiding upstairs in Bellevue Square between The Body Shop and Royce. Chinese street crepe folded to order with a crispy wonton cracked inside.",
+      "recommendedOrders": [
+        "Peking Duck jianbing",
+        "Origin Crepe (egg, wonton, soybean paste)",
+        "Spicy crawfish crepe"
+      ],
+      "tags": [
+        "Chinese",
+        "Quick Bite",
+        "Mall",
+        "Under $15"
+      ],
+      "notes": "Four or five two-tops, that's it. Sometimes listed under the parent name 'Hi Duck'. Best solo lunch in the mall."
+    },
+    {
+      "id": "chicha",
+      "name": "CHICHA San Chen",
+      "category": "BOBA",
+      "categoryName": "Boba & Tea",
+      "sector": "DT",
+      "sectorName": "Bellevue Downtown",
+      "driveFromDowntownBellevue": "0–5 min",
+      "priceTier": 1,
+      "price": "$",
+      "priceRange": "Under $15",
+      "primarilyDrinks": true,
+      "address": "188 Bellevue Square (level 1, near Macy's), Bellevue",
+      "lat": 47.617,
+      "lon": -122.2028,
+      "description": "Taiwanese tea house that brews loose-leaf to order with a machine engineered to mimic a hand pour. This is the boba shop for someone who actually cares about the tea.",
+      "recommendedOrders": [
+        "Brown sugar boba fresh milk",
+        "Dong Ding Oolong",
+        "Cassia black tea",
+        "Osmanthus oolong + mango"
+      ],
+      "tags": [
+        "Taiwanese",
+        "Drinks",
+        "Mall",
+        "Award Tea"
+      ],
+      "notes": "Founded Taichung 1998. Their Dong Ding Oolong has been recognized at the Brussels International Taste Institute. Relocated inside Bellevue Square in Feb 2025."
+    },
+    {
+      "id": "teabydo",
+      "name": "TeaByDo (茶百道)",
+      "category": "BOBA",
+      "categoryName": "Boba & Tea",
+      "sector": "DT",
+      "sectorName": "Bellevue Downtown",
+      "driveFromDowntownBellevue": "0–5 min",
+      "priceTier": 1,
+      "price": "$",
+      "priceRange": "Under $15",
+      "primarilyDrinks": true,
+      "address": "1075 Bellevue Way NE, Suite B-3 (Belgate Plaza), Bellevue",
+      "lat": 47.61993,
+      "lon": -122.20276,
+      "description": "Panda-branded megachain out of Chengdu that quietly became one of the biggest tea companies on earth. Cheap, sweet, extremely photogenic cups.",
+      "recommendedOrders": [
+        "Taro ball milk tea",
+        "Mango pomelo sago",
+        "Watermelon tea smoothie with jelly"
+      ],
+      "tags": [
+        "Chinese",
+        "Drinks",
+        "Under $15",
+        "New Arrival"
+      ],
+      "notes": "8,700+ locations worldwide, founded Chengdu 2008. This is one of its newer U.S. beachheads."
+    },
+    {
+      "id": "tanoor",
+      "name": "Tanoor",
+      "category": "ME",
+      "categoryName": "Middle Eastern",
+      "sector": "DT",
+      "sectorName": "Bellevue Downtown",
+      "driveFromDowntownBellevue": "0–5 min",
+      "priceTier": 2,
+      "price": "$$",
+      "priceRange": "$15-30",
+      "primarilyDrinks": false,
+      "address": "989 112th Ave NE, Suite 105, Bellevue",
+      "lat": 47.6192,
+      "lon": -122.19107,
+      "description": "Lebanese family kitchen baking its own pita in a tanoor oven on site — you can smell it from the sidewalk. The only place on this map where bread is the main event.",
+      "recommendedOrders": [
+        "Chicken shawarma wrap",
+        "Mixed grill platter",
+        "Mezze spread with fresh pita",
+        "Kafta kabob"
+      ],
+      "tags": [
+        "Lebanese",
+        "Halal",
+        "Wraps",
+        "Vegetarian-Friendly"
+      ],
+      "notes": "Third Tanoor location after Seattle's Dexter Ave and Sammamish. Opened downtown around July 2024."
+    },
+    {
+      "id": "fob",
+      "name": "FOB Poke & Sushi Bar",
+      "category": "SUSHI",
+      "categoryName": "Sushi & Poke",
+      "sector": "DT",
+      "sectorName": "Bellevue Downtown",
+      "driveFromDowntownBellevue": "0–5 min",
+      "priceTier": 2,
+      "price": "$$",
+      "priceRange": "$15-30",
+      "primarilyDrinks": false,
+      "address": "333 108th Ave NE (lower level), Bellevue",
+      "lat": 47.61326,
+      "lon": -122.19632,
+      "description": "Self-serve poke and sushi sold by the pound in the basement of the old Expedia HQ. Build it, weigh it, eat it in eleven minutes. Best speed-to-lunch ratio downtown.",
+      "recommendedOrders": [
+        "Build-your-own spicy ahi bowl",
+        "Salmon poke by the pound",
+        "Grab-and-go rolls"
+      ],
+      "tags": [
+        "Japanese",
+        "Hawaiian",
+        "Quick Lunch",
+        "By the Pound"
+      ],
+      "notes": "Seattle-area chain established 2017, roughly $14–16/lb. Note: this and the Belltown branch voluntarily closed for two weeks in late 2024 over food-handling concerns — worth a fresh look at recent reviews."
+    },
+    {
+      "id": "frenchbakery",
+      "name": "The French Bakery",
+      "category": "BAKE",
+      "categoryName": "Bakery & Sweets",
+      "sector": "DT",
+      "sectorName": "Bellevue Downtown",
+      "driveFromDowntownBellevue": "0–5 min",
+      "priceTier": 1,
+      "price": "$",
+      "priceRange": "Under $15",
+      "primarilyDrinks": false,
+      "address": "909 112th Ave NE, Suite 106, Bellevue",
+      "lat": 47.61843,
+      "lon": -122.19108,
+      "description": "Started in 2005 as a wholesale bakery and eventually opened its own doors. Croissants, macarons, and sandwiches on bread that is actually bread.",
+      "recommendedOrders": [
+        "Almond croissant",
+        "Macarons",
+        "Ham & brie baguette",
+        "Fruit tart"
+      ],
+      "tags": [
+        "French",
+        "Pastry",
+        "Breakfast",
+        "Under $15"
+      ],
+      "notes": "Three cafés now: downtown Bellevue, Crossroads, and downtown Redmond. The Crossroads location is a different address — don't get sent across town."
+    },
+    {
+      "id": "santouka",
+      "name": "Hokkaido Ramen Santouka",
+      "category": "NOOD",
+      "categoryName": "Noodle Houses",
+      "sector": "DT",
+      "sectorName": "Bellevue Downtown",
+      "driveFromDowntownBellevue": "0–5 min",
+      "priceTier": 2,
+      "price": "$$",
+      "priceRange": "$15-30",
+      "primarilyDrinks": false,
+      "address": "103 Bellevue Way NE, Suite 3, Bellevue",
+      "lat": 47.61128,
+      "lon": -122.20162,
+      "description": "Descendant of a nine-seat shop that opened in Asahikawa, Hokkaido in 1988 serving exactly one thing. The shio ramen is still the reason to come — milky tonkotsu, one pink pickled plum floating on top.",
+      "recommendedOrders": [
+        "Shio ramen",
+        "Toroniku (pork cheek) add-on",
+        "Gyoza",
+        "Karaage"
+      ],
+      "tags": [
+        "Japanese",
+        "Ramen",
+        "Solo",
+        "Rainy Day"
+      ],
+      "notes": "Order the shio, not the tonkotsu — it's the founding recipe and what the whole chain is built on."
+    },
+    {
+      "id": "dintaifung",
+      "name": "Din Tai Fung",
+      "category": "DUMP",
+      "categoryName": "Dumplings & Buns",
+      "sector": "DT",
+      "sectorName": "Bellevue Downtown",
+      "driveFromDowntownBellevue": "0–5 min",
+      "priceTier": 3,
+      "price": "$$$",
+      "priceRange": "$30-60",
+      "primarilyDrinks": false,
+      "address": "10455 NE 8th St (Lincoln Square North, 1st floor), Bellevue",
+      "lat": 47.61737,
+      "lon": -122.20092,
+      "description": "Eighteen folds per soup dumpling, measured. Moved in April 2024 into a 17,000 sq ft space with a glass-walled dumpling kitchen you can stand and watch. Book 30 days out or accept your fate in the lobby.",
+      "recommendedOrders": [
+        "Kurobuta pork xiao long bao",
+        "Truffle & pork xiao long bao",
+        "Garlic green beans",
+        "Chicken fried rice"
+      ],
+      "tags": [
+        "Taiwanese",
+        "Soup Dumplings",
+        "Special Occasion",
+        "Reserve Ahead"
+      ],
+      "notes": "CORRECTION: it is no longer in Bellevue Square — it's in Lincoln Square North as of April 2024. New space designed by Rockwell Group."
+    },
+    {
+      "id": "kobe",
+      "name": "Kobe",
+      "category": "GRILL",
+      "categoryName": "Grill & BBQ",
+      "sector": "DT",
+      "sectorName": "Bellevue Downtown",
+      "driveFromDowntownBellevue": "0–5 min",
+      "priceTier": 2,
+      "price": "$$",
+      "priceRange": "$15-30",
+      "primarilyDrinks": false,
+      "address": "850 110th Ave NE (in the Courtyard Marriott), Bellevue",
+      "lat": 47.61781,
+      "lon": -122.19354,
+      "description": "A sprawling pan-Asian menu inside a hotel: sushi, teriyaki, hot pot, Korean BBQ and pad thai under one roof. Not precious. Perfect for a group that cannot agree on anything.",
+      "recommendedOrders": [
+        "White Dragon roll",
+        "Hot pot bibimbap",
+        "Teriyaki chicken with yakisoba"
+      ],
+      "tags": [
+        "Japanese",
+        "Korean",
+        "Teriyaki",
+        "Group",
+        "Something for Everyone"
+      ],
+      "notes": "Open Mon–Sat 11am–11pm, closed Sundays. One of the later kitchens downtown."
+    },
+    {
+      "id": "story",
+      "name": "Story Coffee",
+      "category": "COFF",
+      "categoryName": "Coffee",
+      "sector": "DT",
+      "sectorName": "Bellevue Downtown",
+      "driveFromDowntownBellevue": "0–5 min",
+      "priceTier": 1,
+      "price": "$",
+      "priceRange": "Under $15",
+      "primarilyDrinks": true,
+      "address": "11011 NE 9th St, Suite B, Bellevue",
+      "lat": 47.61791,
+      "lon": -122.19243,
+      "description": "Independent and woman-owned, opened 2023. Real seating, real latte art, open-mic nights. The downtown café where you can actually sit down and stay a while.",
+      "recommendedOrders": [
+        "Signature latte",
+        "Seasonal tea",
+        "Pastry of the day"
+      ],
+      "tags": [
+        "Cafe",
+        "Work Spot",
+        "Drinks",
+        "Independent"
+      ],
+      "notes": "Hosts community events including open mics. A rare non-chain in a downtown full of chains."
+    },
+    {
+      "id": "xcj",
+      "name": "Xiao Chi Jie (小吃街)",
+      "category": "ST",
+      "categoryName": "Street Eats",
+      "sector": "DT",
+      "sectorName": "Bellevue Downtown",
+      "driveFromDowntownBellevue": "0–5 min",
+      "priceTier": 1,
+      "price": "$",
+      "priceRange": "Under $15",
+      "primarilyDrinks": false,
+      "address": "278 106th Ave NE (Urban Mix food hall, SOMA Towers), Bellevue",
+      "lat": 47.61274,
+      "lon": -122.19879,
+      "description": "Shanghainese hawker food run fast-casual, founded by a Bellevue native. The sheng jian bao — pan-fried soup buns with a crackly bottom — are the whole point.",
+      "recommendedOrders": [
+        "Sheng jian bao (pan-fried soup buns)",
+        "Dan dan noodles",
+        "Jianbing",
+        "Lu rou fan"
+      ],
+      "tags": [
+        "Shanghainese",
+        "Quick Bite",
+        "Under $15",
+        "Takeout Kits"
+      ],
+      "notes": "Founded by Jennifer Liao and Caleb Wang with the owners of Just Poké. Also sells take-home xiao long bao kits."
+    },
+    {
+      "id": "heytea",
+      "name": "HEYTEA (喜茶)",
+      "category": "BOBA",
+      "categoryName": "Boba & Tea",
+      "sector": "DT",
+      "sectorName": "Bellevue Downtown",
+      "driveFromDowntownBellevue": "0–5 min",
+      "priceTier": 1,
+      "price": "$",
+      "priceRange": "Under $15",
+      "primarilyDrinks": true,
+      "address": "700 110th Ave NE, Suite 192 (The Bravern), Bellevue",
+      "lat": 47.61646,
+      "lon": -122.19355,
+      "description": "Shenzhen's 'new-style tea' giant — real fruit, salted cheese foam on top, glossy minimal branding. This was the first HEYTEA in Washington State.",
+      "recommendedOrders": [
+        "Cheese Grape Boom",
+        "Coconut Mango Boom",
+        "Supreme Brown Sugar Bobo milk tea"
+      ],
+      "tags": [
+        "Chinese",
+        "Drinks",
+        "Cheese Foam",
+        "First in WA"
+      ],
+      "notes": "Opened summer 2024 inside The Bravern. Get the cheese foam — it's the signature, not a gimmick."
+    },
+    {
+      "id": "mamaxita",
+      "name": "Mama Xita BBQ",
+      "category": "GRILL",
+      "categoryName": "Grill & BBQ",
+      "sector": "DT",
+      "sectorName": "Bellevue Downtown",
+      "driveFromDowntownBellevue": "0–5 min",
+      "priceTier": 3,
+      "price": "$$$",
+      "priceRange": "$30-60",
+      "primarilyDrinks": false,
+      "address": "550 106th Ave NE, Suite 101, Bellevue",
+      "lat": 47.61512,
+      "lon": -122.19884,
+      "description": "Despite the name: not Mexican. This is Chinese-Korean wagyu barbecue — 450+ locations across Asia, and this is the brand's first store in the United States.",
+      "recommendedOrders": [
+        "Wagyu assortment platter",
+        "Signature marinated short rib",
+        "House banchan spread"
+      ],
+      "tags": [
+        "Chinese",
+        "Korean",
+        "Wagyu",
+        "Group",
+        "Splurge"
+      ],
+      "notes": "Operated by Chubby Group; the brand runs 450+ locations in 31 Asian cities with 20+ years of history. The name fools everyone — tell Jimmy before he shows up expecting tacos."
+    },
+    {
+      "id": "north",
+      "name": "North — All-You-Can-Eat Dumplings",
+      "category": "DUMP",
+      "categoryName": "Dumplings & Buns",
+      "sector": "FAC",
+      "sectorName": "Factoria",
+      "driveFromDowntownBellevue": "~8 min",
+      "priceTier": 2,
+      "price": "$$",
+      "priceRange": "$15-30",
+      "primarilyDrinks": false,
+      "address": "12708 SE 38th St, Bellevue (Factoria)",
+      "lat": 47.5766,
+      "lon": -122.17052,
+      "description": "Dumplings folded by hand on site, and $18.99 buys as many as you can physically hold. The correct answer to 'I'm really hungry and I have $20.'",
+      "recommendedOrders": [
+        "AYCE pork & chive dumplings",
+        "Shrimp dumplings",
+        "Lamb spine hot pot",
+        "Cold pork noodles"
+      ],
+      "tags": [
+        "Chinese",
+        "AYCE",
+        "Group",
+        "Best Value"
+      ],
+      "notes": "Closed Mondays and Tuesdays. Not to be confused with 'The Northern Dumplings' on Bel-Red — different restaurant entirely."
+    },
+    {
+      "id": "labean",
+      "name": "La'bean",
+      "category": "COFF",
+      "categoryName": "Coffee",
+      "sector": "FAC",
+      "sectorName": "Factoria",
+      "driveFromDowntownBellevue": "~8 min",
+      "priceTier": 1,
+      "price": "$",
+      "priceRange": "Under $15",
+      "primarilyDrinks": true,
+      "address": "12668 SE 38th St, Bellevue (Factoria)",
+      "lat": 47.57675,
+      "lon": -122.17096,
+      "description": "A brand-new Vietnamese coffee bar doing cà phê sữa đá properly, plus a handful of drinks you genuinely won't find anywhere else on the Eastside.",
+      "recommendedOrders": [
+        "Cà phê sữa đá",
+        "Ube & peanut coffee",
+        "Velvet brûlée",
+        "Matcha strawberry latte"
+      ],
+      "tags": [
+        "Vietnamese",
+        "Drinks",
+        "Under $15",
+        "New 2025"
+      ],
+      "notes": "Opened 2025 in the Factoria strip. Free WiFi. The ube & peanut is the signature — order it even if it sounds strange."
+    },
+    {
+      "id": "omiya",
+      "name": "Sushi Omiya",
+      "category": "SUSHI",
+      "categoryName": "Sushi & Poke",
+      "sector": "FAC",
+      "sectorName": "Factoria",
+      "driveFromDowntownBellevue": "~8 min",
+      "priceTier": 2,
+      "price": "$$",
+      "priceRange": "$15-30",
+      "primarilyDrinks": false,
+      "address": "3928 Factoria Square Mall SE, Suite B4, Bellevue",
+      "lat": 47.57541,
+      "lon": -122.16937,
+      "description": "Conveyor-belt sushi with a little monorail that drives your order to the table. Plates from $3.45. Objectively the most fun per dollar on this entire map.",
+      "recommendedOrders": [
+        "Mango salmon roll",
+        "Salmon nigiri",
+        "Chicken karaage",
+        "Tonkotsu chashu udon"
+      ],
+      "tags": [
+        "Japanese",
+        "Conveyor Belt",
+        "Family",
+        "Free Parking"
+      ],
+      "notes": "Small regional chain with a second location in Tukwila. Free mall parking — rare advantage over downtown."
+    },
+    {
+      "id": "doughsavor",
+      "name": "Dough Savor",
+      "category": "BAKE",
+      "categoryName": "Bakery & Sweets",
+      "sector": "BR",
+      "sectorName": "Bel-Red",
+      "driveFromDowntownBellevue": "~9 min",
+      "priceTier": 1,
+      "price": "$",
+      "priceRange": "Under $15",
+      "primarilyDrinks": false,
+      "address": "14505 NE 20th St, Suite M (Asian Family Market food court), Bellevue",
+      "lat": 47.62784,
+      "lon": -122.14684,
+      "description": "A Chinese breakfast counter inside a grocery food court. Youtiao and hot soy milk, jianbing, savory tofu pudding. The cheapest genuinely good meal on this map.",
+      "recommendedOrders": [
+        "Youtiao + fresh soy milk",
+        "Jianbing",
+        "Pan-fried beef bao",
+        "Savory tofu pudding"
+      ],
+      "tags": [
+        "Chinese",
+        "Breakfast",
+        "Under $15",
+        "Food Court"
+      ],
+      "notes": "Inside the market food court, not a standalone storefront. Reviews favor the buns and pastries over the dumplings. Can get a long line on weekend mornings."
+    },
+    {
+      "id": "southernspice",
+      "name": "Southern Spice",
+      "category": "IND",
+      "categoryName": "Indian",
+      "sector": "BR",
+      "sectorName": "Bel-Red",
+      "driveFromDowntownBellevue": "~9 min",
+      "priceTier": 2,
+      "price": "$$",
+      "priceRange": "$15-30",
+      "primarilyDrinks": false,
+      "address": "15112 NE 24th St, Redmond (Bel-Red corridor)",
+      "lat": 47.63159,
+      "lon": -122.1391,
+      "description": "Widely argued to be the best biryani on the Eastside. South Indian at the core with a North Indian menu bolted on and a daily lunch buffet.",
+      "recommendedOrders": [
+        "Chicken biryani",
+        "Karam podi chicken fry",
+        "Dynamite gobi",
+        "Dosa"
+      ],
+      "tags": [
+        "South Indian",
+        "Biryani",
+        "Halal",
+        "Lunch Buffet",
+        "Vegetarian-Friendly"
+      ],
+      "notes": "Brands itself 'Southern Spice Bellevue' but the municipal address is Redmond, right on the line. The old E Lake Sammamish Pkwy location is closed."
+    },
+    {
+      "id": "seoulmeat",
+      "name": "Seoul Meat Co.",
+      "category": "GRILL",
+      "categoryName": "Grill & BBQ",
+      "sector": "KIRK",
+      "sectorName": "Kirkland",
+      "driveFromDowntownBellevue": "~15 min",
+      "priceTier": 3,
+      "price": "$$$",
+      "priceRange": "$30-60",
+      "primarilyDrinks": false,
+      "address": "12600 120th Ave NE, Suite 146 (Village at Totem Lake), Kirkland",
+      "lat": 47.71156,
+      "lon": -122.17905,
+      "description": "All-you-can-eat Korean BBQ with a grill built into every table. Two-hour limit, three meat orders at a time, no reservations. Show up hungry and early.",
+      "recommendedOrders": [
+        "Marinated short rib",
+        "Spicy pork belly",
+        "Brisket",
+        "Beef belly + full banchan"
+      ],
+      "tags": [
+        "Korean",
+        "AYCE",
+        "Group",
+        "Walk-In Only"
+      ],
+      "notes": "Roughly $39–45 per person depending on the day. First-come first-served — the Friday and Saturday queues are real."
+    },
+    {
+      "id": "kobuta",
+      "name": "Kobuta & Ookami Katsu and Sake House",
+      "category": "GRILL",
+      "categoryName": "Grill & BBQ",
+      "sector": "RED",
+      "sectorName": "Redmond",
+      "driveFromDowntownBellevue": "~18 min",
+      "priceTier": 3,
+      "price": "$$$",
+      "priceRange": "$30-60",
+      "primarilyDrinks": false,
+      "address": "17026 Avondale Way NE, Unit A, Redmond",
+      "lat": 47.6728,
+      "lon": -122.11216,
+      "description": "Three siblings running a tonkatsu specialist and sake bar. The curry has dark chocolate in the sauce. The Seattle Times called it the best place in the region to pork out.",
+      "recommendedOrders": [
+        "Kurobuta katsu",
+        "Iberico katsu",
+        "Katsu curry (dark chocolate sauce)",
+        "Mozzarella katsu"
+      ],
+      "tags": [
+        "Japanese",
+        "Katsu",
+        "Date Night",
+        "Sake Bar",
+        "Splurge"
+      ],
+      "notes": "Family-owned by the Tandavanitj siblings; started on Capitol Hill before opening here. Reservations only for parties of 6+. Entrées run $21–34."
+    },
+    {
+      "id": "feast",
+      "name": "Feast Buffet",
+      "category": "BUF",
+      "categoryName": "Buffet & AYCE",
+      "sector": "REN",
+      "sectorName": "Renton",
+      "driveFromDowntownBellevue": "~18 min",
+      "priceTier": 3,
+      "price": "$$$",
+      "priceRange": "$30-60",
+      "primarilyDrinks": false,
+      "address": "485 Renton Center Way SW, Renton",
+      "lat": 47.4762,
+      "lon": -122.21707,
+      "description": "One of the largest buffets in Washington State. Sushi, dim sum, hibachi, Mongolian BBQ — and snow crab legs plus lobster claws on Friday through Sunday dinner only.",
+      "recommendedOrders": [
+        "King snow crab legs (Fri–Sun dinner)",
+        "Lobster claws",
+        "Dim sum station",
+        "Mongolian BBQ"
+      ],
+      "tags": [
+        "Asian Buffet",
+        "Crab",
+        "Group",
+        "Go Hungry"
+      ],
+      "notes": "Lunch ~$27, dinner ~$39+, weekend crab dinners reported up to $45. It's in Renton Shopping Center anchored by Fred Meyer — not near a 99 Ranch."
+    },
+    {
+      "id": "champion",
+      "name": "Champion Gourmet Taiwanese Cafe",
+      "category": "ST",
+      "categoryName": "Street Eats",
+      "sector": "KENT",
+      "sectorName": "Kent",
+      "driveFromDowntownBellevue": "~25 min",
+      "priceTier": 1,
+      "price": "$",
+      "priceRange": "Under $15",
+      "primarilyDrinks": false,
+      "address": "18230 E Valley Hwy, Suite 122 (Great Wall Shopping Mall), Kent",
+      "lat": 47.439,
+      "lon": -122.22204,
+      "description": "Taiwanese breakfast and comfort food tucked inside the 99 Ranch mall in Kent. The farthest target on this map and the one most worth the drive if lu rou fan is your thing.",
+      "recommendedOrders": [
+        "Lu rou fan (braised pork rice)",
+        "Beef noodle soup",
+        "Taiwanese breakfast set",
+        "Zongzi"
+      ],
+      "tags": [
+        "Taiwanese",
+        "Breakfast",
+        "Boba",
+        "Under $15",
+        "Worth the Drive"
+      ],
+      "notes": "Listed as 'Champion Gourmet' — your note said 'Champino', which appears to be a mis-transcription. Great Wall Shopping Mall has been running since 1999; make a grocery run while you're there."
+    },
+    {
+      "id": "phobac",
+      "name": "Pho Bac Cafe",
+      "category": "NOOD",
+      "categoryName": "Noodle Houses",
+      "sector": "KENT",
+      "sectorName": "Kent",
+      "driveFromDowntownBellevue": "~25 min",
+      "priceTier": 2,
+      "price": "$$",
+      "priceRange": "$15-30",
+      "primarilyDrinks": false,
+      "address": "18119 E Valley Hwy, Suite 102, Kent",
+      "lat": 47.43971,
+      "lon": -122.22149,
+      "description": "A no-frills mom-and-pop pho counter on East Valley Highway that people in Kent, Renton and Tukwila will argue has the best broth in the south end. Nothing fancy, nothing trying too hard — just the soup.",
+      "recommendedOrders": [
+        "Phở tái nạm (rare steak + brisket)",
+        "#28 — bún with grilled pork",
+        "Cơm dĩa rice plates",
+        "Chè Thái"
+      ],
+      "tags": [
+        "Vietnamese",
+        "Pho",
+        "Solo",
+        "Rainy Day",
+        "Worth the Drive"
+      ],
+      "notes": "Open daily 10am–8pm (a few delivery apps list 10–9; trust the shorter hours). Despite the name, no connection was found to the Phở Bắc chain in Seattle's Chinatown-ID — this looks like an independent business. Cards accepted, private lot parking, no reservations, no alcohol."
+    },
+    {
+      "id": "happynoodles",
+      "name": "Happy Noodles",
+      "category": "NOOD",
+      "categoryName": "Noodle Houses",
+      "sector": "KENT",
+      "sectorName": "Kent",
+      "driveFromDowntownBellevue": "~25 min",
+      "priceTier": 2,
+      "price": "$$",
+      "priceRange": "$15-30",
+      "primarilyDrinks": false,
+      "address": "18126 E Valley Hwy, Kent",
+      "lat": 47.43992,
+      "lon": -122.22106,
+      "description": "Sichuan hand-made noodles cooked by owners who are actually from Sichuan. Huge portions, real heat, and a menu that runs well past noodles into braised duck, pork hock and hot pot.",
+      "recommendedOrders": [
+        "Spicy dan dan noodles",
+        "Spicy beef noodle soup",
+        "Cold noodles with peanuts",
+        "Braised pork hock",
+        "Spicy beef hotpot vermicelli"
+      ],
+      "tags": [
+        "Sichuan",
+        "Chinese",
+        "Spicy",
+        "Big Portions",
+        "Hidden Gem"
+      ],
+      "notes": "Closed Mondays; Tue–Sun 11am–8:30pm. A rebrand of the old 'Noodle House' at the same address and phone. Most dishes run $13–19, hot pot $32.99. Sits directly across East Valley Hwy from Pho Bac Cafe, with Champion Gourmet a block south — three targets inside 200 metres, so Kent is worth one combined trip."
+    }
+  ]
+}

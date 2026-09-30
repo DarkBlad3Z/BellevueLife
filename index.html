@@ -1,0 +1,1544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jimmy's Taste of Washington — Eastside Tactical Command</title>
+<style>
+:root{
+  color-scheme: light;
+  --void:#04070a;
+  --deep:#070d12;
+  --panel:rgba(10,20,27,.88);
+  --panel-solid:#0b1720;
+  --line:rgba(57,215,255,.22);
+  --line-soft:rgba(57,215,255,.10);
+  --amber:#ffa62b;
+  --amber-hi:#ffd08a;
+  --amber-dim:rgba(255,166,43,.18);
+  --cyan:#3ad7ff;
+  --cyan-hi:#a9f0ff;
+  --cyan-dim:rgba(58,215,255,.14);
+  --green:#5dff9f;
+  --red:#ff5540;
+  --violet:#b98cff;
+  --txt:#cfe9f5;
+  --txt-dim:#7fa3b5;
+  --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --disp: "Rajdhani","Oswald","Arial Narrow","Helvetica Neue Condensed",Impact,system-ui,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  background:var(--void);
+  color:var(--txt);
+  font-family:var(--disp);
+  font-size:15px;
+  overflow-x:hidden;
+}
+#app{
+  position:relative;
+  min-height:100vh;
+  background:
+    radial-gradient(1200px 700px at 18% -8%, rgba(255,166,43,.10), transparent 60%),
+    radial-gradient(900px 600px at 92% 12%, rgba(58,215,255,.10), transparent 62%),
+    linear-gradient(180deg,#05090d 0%, #070f15 40%, #04080b 100%);
+}
+/* hex mesh + scanlines */
+#app::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.45;
+  background-image:
+    linear-gradient(rgba(58,215,255,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(58,215,255,.045) 1px, transparent 1px);
+  background-size:52px 52px;
+  mask-image:radial-gradient(circle at 50% 30%, #000 0%, transparent 85%);
+}
+#app::after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:900;
+  background:repeating-linear-gradient(to bottom, rgba(0,0,0,0) 0 2px, rgba(0,0,0,.20) 2px 3px);
+  opacity:.5;mix-blend-mode:multiply;
+}
+.wrap{position:relative;z-index:5;max-width:1180px;margin:0 auto;padding:0 14px 60px}
+
+/* ══ BOOT ══ */
+#boot{
+  position:fixed;inset:0;z-index:2000;background:#03060a;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:22px;padding:24px;text-align:center;
+  transition:opacity .6s ease, visibility .6s;
+}
+#boot.gone{opacity:0;visibility:hidden}
+.boot-emblem{width:128px;height:128px;filter:drop-shadow(0 0 22px rgba(255,166,43,.55))}
+.boot-log{
+  font-family:var(--mono);font-size:11.5px;line-height:1.85;color:var(--cyan);
+  text-align:left;min-height:170px;width:min(480px,92vw);
+  letter-spacing:.4px;
+}
+.boot-log b{color:var(--amber)}
+.boot-log .ok{color:var(--green)}
+.boot-title{
+  font-size:clamp(26px,6vw,46px);font-weight:700;letter-spacing:.20em;
+  color:var(--amber-hi);text-transform:uppercase;line-height:1.05;
+  text-shadow:0 0 28px rgba(255,166,43,.55);margin:0;
+}
+.boot-sub{font-family:var(--mono);font-size:11px;letter-spacing:.32em;color:var(--txt-dim);text-transform:uppercase}
+.bigbtn{
+  position:relative;font-family:var(--disp);font-weight:700;letter-spacing:.20em;
+  text-transform:uppercase;font-size:16px;padding:16px 34px;cursor:pointer;
+  color:#0a0704;background:linear-gradient(180deg,var(--amber-hi),var(--amber));
+  border:none;clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px);
+  box-shadow:0 0 34px rgba(255,166,43,.45), inset 0 0 0 1px rgba(255,255,255,.35);
+  transition:transform .12s, box-shadow .2s;
+}
+.bigbtn:hover{transform:translateY(-2px);box-shadow:0 0 54px rgba(255,166,43,.75)}
+.bigbtn.ghost{
+  color:var(--txt-dim);background:transparent;
+  box-shadow:inset 0 0 0 1px rgba(127,163,181,.35);font-size:12px;padding:12px 22px;letter-spacing:.16em;
+}
+.bigbtn.ghost:hover{color:var(--cyan-hi);box-shadow:inset 0 0 0 1px var(--cyan)}
+.boot-row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;align-items:center}
+.blink{animation:blink 1s steps(2,end) infinite}
+@keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+
+/* ══ HEADER ══ */
+header.hud{
+  position:relative;margin-top:16px;padding:16px 18px;
+  background:linear-gradient(90deg, rgba(255,166,43,.10), rgba(10,20,27,.85) 32%, rgba(10,20,27,.85) 68%, rgba(58,215,255,.10));
+  border:1px solid var(--line);
+  clip-path:polygon(0 0,calc(100% - 22px) 0,100% 22px,100% 100%,22px 100%,0 calc(100% - 22px));
+  display:flex;gap:16px;align-items:center;flex-wrap:wrap;
+}
+header.hud::before{
+  content:"";position:absolute;left:0;top:0;height:2px;width:100%;
+  background:linear-gradient(90deg,var(--amber),transparent 45%,transparent 55%,var(--cyan));
+}
+.emblem{width:56px;height:56px;flex:0 0 auto;filter:drop-shadow(0 0 10px rgba(255,166,43,.5))}
+.htext{flex:1 1 240px;min-width:200px}
+h1{
+  margin:0;font-size:clamp(20px,3.4vw,32px);font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--amber-hi);text-shadow:0 0 18px rgba(255,166,43,.4);line-height:1.05;
+}
+.tagline{font-family:var(--mono);font-size:10.5px;letter-spacing:.24em;color:var(--txt-dim);text-transform:uppercase;margin-top:6px}
+.tagline .hl{color:var(--cyan)}
+.hud-right{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.readout{
+  font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--txt-dim);
+  border:1px solid var(--line-soft);padding:7px 11px;background:rgba(3,10,14,.6);text-transform:uppercase;
+}
+.readout b{color:var(--amber);font-size:14px;display:block;letter-spacing:.06em;font-family:var(--disp)}
+#sndBtn{
+  font-family:var(--disp);font-weight:700;letter-spacing:.16em;text-transform:uppercase;font-size:12px;
+  padding:11px 16px;cursor:pointer;border:1px solid var(--amber);background:rgba(255,166,43,.08);
+  color:var(--amber);display:flex;align-items:center;gap:8px;transition:.18s;
+}
+#sndBtn:hover{background:rgba(255,166,43,.22);box-shadow:0 0 20px rgba(255,166,43,.4)}
+#sndBtn.on{border-color:var(--green);color:var(--green);background:rgba(93,255,159,.10)}
+#sndBtn.on:hover{box-shadow:0 0 20px rgba(93,255,159,.4)}
+.eq{display:inline-flex;gap:2px;align-items:flex-end;height:13px}
+.eq i{width:2.5px;background:currentColor;height:5px;display:block;opacity:.65}
+#sndBtn.on .eq i{opacity:1}
+#sndBtn.on .eq i{animation:eq .62s ease-in-out infinite alternate}
+#sndBtn.on .eq i:nth-child(2){animation-delay:.14s}
+#sndBtn.on .eq i:nth-child(3){animation-delay:.28s}
+#sndBtn.on .eq i:nth-child(4){animation-delay:.42s}
+@keyframes eq{from{height:3px}to{height:13px}}
+
+/* ══ GREETING ══ */
+.greet{
+  margin-top:12px;padding:13px 16px;border-left:3px solid var(--cyan);
+  background:linear-gradient(90deg, rgba(58,215,255,.12), rgba(58,215,255,0) 70%);
+  font-family:var(--mono);font-size:12px;line-height:1.75;color:var(--cyan-hi);letter-spacing:.04em;
+}
+.greet b{color:var(--amber);letter-spacing:.14em}
+
+/* ══ FILTER CONSOLE ══ */
+.console{
+  margin-top:14px;border:1px solid var(--line);background:var(--panel);
+  clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px));
+}
+.crow{padding:11px 14px;border-bottom:1px solid var(--line-soft);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.crow:last-child{border-bottom:none}
+.clabel{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.24em;color:var(--txt-dim);
+  text-transform:uppercase;min-width:82px;flex:0 0 auto;
+}
+.chips{display:flex;gap:7px;flex-wrap:wrap;flex:1 1 auto}
+.chip{
+  font-family:var(--disp);font-weight:600;font-size:12px;letter-spacing:.09em;text-transform:uppercase;
+  padding:7px 12px;cursor:pointer;user-select:none;transition:.15s;
+  border:1px solid rgba(127,163,181,.3);background:rgba(4,12,17,.7);color:var(--txt-dim);
+  display:flex;align-items:center;gap:7px;line-height:1;
+}
+.chip:hover{border-color:var(--cyan);color:var(--cyan-hi);background:rgba(58,215,255,.10)}
+.chip.on{border-color:var(--amber);color:#0a0704;background:linear-gradient(180deg,var(--amber-hi),var(--amber));box-shadow:0 0 16px rgba(255,166,43,.4)}
+.chip .n{font-family:var(--mono);font-size:9px;opacity:.75}
+.chip .sw{width:9px;height:9px;border-radius:50%;box-shadow:0 0 7px currentColor}
+.chip.big{font-size:13px;padding:8px 16px;letter-spacing:.16em}
+#search{
+  flex:1 1 170px;min-width:150px;background:rgba(4,12,17,.8);border:1px solid rgba(127,163,181,.3);
+  color:var(--cyan-hi);font-family:var(--mono);font-size:12px;padding:8px 11px;letter-spacing:.05em;outline:none;
+}
+#search:focus{border-color:var(--cyan);box-shadow:0 0 14px rgba(58,215,255,.3)}
+#search::placeholder{color:#4d6b7a}
+.mini{
+  font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;
+  border:1px solid rgba(255,85,64,.45);color:var(--red);background:rgba(255,85,64,.07);padding:7px 11px;transition:.15s;
+}
+.mini:hover{background:rgba(255,85,64,.2);box-shadow:0 0 14px rgba(255,85,64,.35)}
+
+/* ══ MAP ══ */
+.stage{margin-top:14px;display:grid;grid-template-columns:1fr;gap:14px;align-items:start}
+@media(min-width:960px){.stage{grid-template-columns:1.05fr .95fr}}
+.mapbox{
+  position:relative;border:1px solid var(--line);background:#04090d;overflow:hidden;
+  clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,18px 100%,0 calc(100% - 18px));
+  height:clamp(380px, 88vw, 600px);align-self:start;
+}
+@media(min-width:960px){.mapbox{height:660px}}
+#mapsvg{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:grab}
+#mapsvg.drag{cursor:grabbing}
+#pinlayer{position:absolute;inset:0;pointer-events:none}
+.pin{
+  position:absolute;transform:translate(-50%,-50%);pointer-events:auto;cursor:pointer;
+  width:22px;height:22px;display:flex;align-items:center;justify-content:center;
+}
+.pin .dot{
+  width:11px;height:11px;transform:rotate(45deg);
+  background:var(--c);box-shadow:0 0 12px var(--c), 0 0 3px #fff inset;
+  border:1px solid rgba(255,255,255,.75);transition:.16s;
+}
+.pin .ring{
+  position:absolute;width:22px;height:22px;border:1px solid var(--c);border-radius:50%;opacity:.45;
+}
+.pin:hover .dot,.pin.sel .dot{width:17px;height:17px;box-shadow:0 0 22px var(--c)}
+.pin.sel .ring{animation:ping 1.3s ease-out infinite}
+@keyframes ping{0%{transform:scale(.7);opacity:.9}100%{transform:scale(2.3);opacity:0}}
+.pin .lbl{
+  position:absolute;left:16px;top:-4px;white-space:nowrap;font-family:var(--mono);font-size:9.5px;
+  letter-spacing:.09em;color:var(--cyan-hi);background:rgba(3,10,14,.92);padding:3px 7px;
+  border-left:2px solid var(--c);opacity:0;transform:translateX(-4px);transition:.15s;pointer-events:none;
+  text-transform:uppercase;
+}
+.pin:hover .lbl,.pin.sel .lbl{opacity:1;transform:translateX(0)}
+.cluster{
+  position:absolute;transform:translate(-50%,-50%);pointer-events:auto;cursor:pointer;
+  min-width:34px;height:34px;padding:0 6px;border-radius:50px;
+  display:flex;align-items:center;justify-content:center;gap:4px;
+  background:rgba(4,14,20,.9);border:1px solid var(--amber);
+  color:var(--amber-hi);font-family:var(--mono);font-size:12px;font-weight:700;
+  box-shadow:0 0 18px rgba(255,166,43,.35);transition:.16s;letter-spacing:.02em;
+}
+.cluster:hover{background:rgba(255,166,43,.22);box-shadow:0 0 30px rgba(255,166,43,.7);transform:translate(-50%,-50%) scale(1.09)}
+.cluster small{font-size:7.5px;letter-spacing:.1em;opacity:.7;display:block;line-height:1}
+.mapctl{position:absolute;left:10px;top:10px;display:flex;flex-direction:column;gap:5px;z-index:6}
+.mapctl .chip{font-size:10px;padding:6px 9px;letter-spacing:.12em;background:rgba(3,10,14,.85)}
+.mapctl .chip.on{background:linear-gradient(180deg,var(--amber-hi),var(--amber));color:#0a0704}
+.maplegend{
+  position:absolute;right:10px;bottom:10px;z-index:6;background:rgba(3,10,14,.85);
+  border:1px solid var(--line-soft);padding:8px 10px;font-family:var(--mono);font-size:8.5px;
+  letter-spacing:.1em;color:var(--txt-dim);display:grid;grid-template-columns:1fr 1fr;gap:3px 10px;text-transform:uppercase;
+}
+.maplegend i{display:inline-block;width:7px;height:7px;transform:rotate(45deg);margin-right:5px;box-shadow:0 0 6px currentColor;background:currentColor}
+.mapcoord{
+  position:absolute;left:10px;bottom:10px;z-index:6;font-family:var(--mono);font-size:9px;
+  letter-spacing:.14em;color:var(--cyan);background:rgba(3,10,14,.85);padding:6px 9px;border:1px solid var(--line-soft);
+}
+.corner{position:absolute;width:20px;height:20px;border:2px solid var(--amber);opacity:.55;z-index:6;pointer-events:none}
+.corner.tl{left:6px;top:6px;border-right:0;border-bottom:0}
+.corner.tr{right:6px;top:6px;border-left:0;border-bottom:0}
+.corner.bl{left:6px;bottom:6px;border-right:0;border-top:0}
+.corner.br{right:6px;bottom:6px;border-left:0;border-top:0}
+
+/* ══ DOSSIER ══ */
+.dossier{
+  border:1px solid var(--line);background:var(--panel);position:relative;overflow:hidden;
+  clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,18px 100%,0 calc(100% - 18px));
+  display:flex;flex-direction:column;min-height:420px;align-self:start;
+}
+@media(min-width:960px){.dossier{height:660px}}
+.dossier::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),transparent)}
+.dsc{padding:16px 18px;overflow-y:auto;flex:1}
+.dsc::-webkit-scrollbar{width:7px}
+.dsc::-webkit-scrollbar-thumb{background:rgba(58,215,255,.3)}
+.dsc::-webkit-scrollbar-track{background:rgba(255,255,255,.03)}
+.empty{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;
+  gap:14px;text-align:center;color:var(--txt-dim);font-family:var(--mono);font-size:11px;letter-spacing:.2em;
+  text-transform:uppercase;padding:20px;
+}
+.empty svg{opacity:.3}
+.d-cat{font-family:var(--mono);font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--c)}
+.d-name{font-size:clamp(20px,3.6vw,29px);font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--amber-hi);line-height:1.08;margin:5px 0 2px}
+.d-sub{font-family:var(--mono);font-size:10.5px;color:var(--txt-dim);letter-spacing:.09em}
+.d-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:7px;margin:14px 0}
+.d-stat{border:1px solid var(--line-soft);background:rgba(3,10,14,.55);padding:8px 10px}
+.d-stat .k{font-family:var(--mono);font-size:8.5px;letter-spacing:.2em;color:var(--txt-dim);text-transform:uppercase}
+.d-stat .v{font-size:15px;font-weight:700;letter-spacing:.06em;color:var(--cyan-hi);margin-top:3px;text-transform:uppercase}
+.d-stat .v.money{color:var(--green)}
+.bar{height:3px;background:rgba(255,255,255,.07);margin-top:6px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--amber),var(--amber-hi));box-shadow:0 0 8px var(--amber)}
+.d-body{font-size:14.5px;line-height:1.68;color:var(--txt);letter-spacing:.01em;margin:4px 0 14px;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+.d-sec{margin-top:15px}
+.d-sec h4{
+  margin:0 0 8px;font-family:var(--mono);font-size:9.5px;letter-spacing:.24em;color:var(--amber);
+  text-transform:uppercase;display:flex;align-items:center;gap:8px;
+}
+.d-sec h4::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--amber-dim),transparent)}
+.orders{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:5px}
+.orders li{
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;color:var(--cyan-hi);
+  padding:6px 10px;background:rgba(58,215,255,.07);border-left:2px solid var(--cyan);
+}
+.tagrow{display:flex;gap:6px;flex-wrap:wrap}
+.tag{
+  font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;
+  padding:4px 8px;border:1px solid rgba(185,140,255,.4);color:var(--violet);background:rgba(185,140,255,.08);
+}
+.intel{font-family:var(--mono);font-size:11px;line-height:1.7;color:var(--txt-dim);letter-spacing:.02em}
+.d-actions{padding:12px 18px;border-top:1px solid var(--line-soft);display:flex;gap:8px;flex-wrap:wrap;background:rgba(3,10,14,.5)}
+.abtn{
+  flex:1 1 auto;text-align:center;font-family:var(--disp);font-weight:700;font-size:11.5px;letter-spacing:.14em;
+  text-transform:uppercase;padding:10px 13px;cursor:pointer;text-decoration:none;transition:.15s;
+  border:1px solid var(--cyan);color:var(--cyan);background:rgba(58,215,255,.07);
+}
+.abtn:hover{background:rgba(58,215,255,.2);box-shadow:0 0 18px rgba(58,215,255,.4)}
+.abtn.amber{border-color:var(--amber);color:var(--amber);background:rgba(255,166,43,.07)}
+.abtn.amber:hover{background:rgba(255,166,43,.2);box-shadow:0 0 18px rgba(255,166,43,.4)}
+
+/* ══ ROSTER ══ */
+.sectitle{
+  margin:26px 0 12px;display:flex;align-items:center;gap:12px;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.3em;color:var(--amber);text-transform:uppercase;
+}
+.sectitle::before{content:"";width:22px;height:2px;background:var(--amber);box-shadow:0 0 10px var(--amber)}
+.sectitle::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--amber-dim),transparent)}
+.sectitle span{color:var(--txt-dim);letter-spacing:.16em}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:11px}
+.card{
+  position:relative;border:1px solid var(--line-soft);background:linear-gradient(160deg,rgba(11,23,32,.95),rgba(5,12,17,.95));
+  padding:13px 14px 12px;cursor:pointer;transition:.18s;overflow:hidden;
+  clip-path:polygon(0 0,calc(100% - 13px) 0,100% 13px,100% 100%,13px 100%,0 calc(100% - 13px));
+}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--c);box-shadow:0 0 12px var(--c);opacity:.85}
+.card:hover{border-color:var(--cyan);transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,.6),0 0 24px rgba(58,215,255,.17)}
+.card.sel{border-color:var(--amber);box-shadow:0 0 0 1px var(--amber),0 0 28px rgba(255,166,43,.3)}
+.card .ct{font-family:var(--mono);font-size:8.5px;letter-spacing:.22em;color:var(--c);text-transform:uppercase}
+.card h3{margin:5px 0 4px;font-size:17px;font-weight:700;letter-spacing:.045em;text-transform:uppercase;color:var(--amber-hi);line-height:1.15}
+.card .meta{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:var(--txt-dim);display:flex;gap:9px;flex-wrap:wrap;text-transform:uppercase}
+.card .meta .pr{color:var(--green);font-weight:700}
+.card p{margin:9px 0 0;font-size:12.8px;line-height:1.55;color:#9fc0d0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+.card .idx{position:absolute;right:9px;top:8px;font-family:var(--mono);font-size:9px;color:rgba(127,163,181,.35);letter-spacing:.1em}
+.noresult{
+  grid-column:1/-1;text-align:center;padding:46px 20px;border:1px dashed rgba(255,85,64,.35);
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.2em;color:var(--red);text-transform:uppercase;line-height:2;
+}
+footer{
+  margin-top:34px;padding-top:16px;border-top:1px solid var(--line-soft);
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;color:#4d6b7a;text-transform:uppercase;line-height:2;text-align:center;
+}
+.toast{
+  position:fixed;left:50%;bottom:26px;transform:translate(-50%,24px);z-index:1500;
+  background:rgba(4,14,20,.96);border:1px solid var(--amber);color:var(--amber-hi);
+  font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  padding:11px 18px;opacity:0;transition:.28s;pointer-events:none;box-shadow:0 0 30px rgba(255,166,43,.35);
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+
+<div id="app">
+
+<!-- ═══════════ BOOT ═══════════ -->
+<div id="boot">
+  <svg class="boot-emblem" viewBox="0 0 100 100" aria-hidden="true">
+    <defs>
+      <linearGradient id="bg1" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#ffd08a"/><stop offset="1" stop-color="#ff8c14"/>
+      </linearGradient>
+    </defs>
+    <path d="M50 5 L88 26 L88 68 L50 95 L12 68 L12 26 Z" fill="none" stroke="url(#bg1)" stroke-width="2.5"/>
+    <path d="M50 15 L79 31 L79 64 L50 84 L21 64 L21 31 Z" fill="none" stroke="#3ad7ff" stroke-width="1" opacity=".55"/>
+    <path d="M34 40 h32 M34 40 q0 16 16 24 q16 -8 16 -24" fill="none" stroke="url(#bg1)" stroke-width="3.4" stroke-linecap="round"/>
+    <circle cx="50" cy="33" r="4.2" fill="url(#bg1)"/>
+    <path d="M42 52 h16" stroke="#3ad7ff" stroke-width="2" stroke-linecap="round"/>
+  </svg>
+  <div class="boot-log" id="bootlog"></div>
+  <h2 class="boot-title">Jimmy's Taste<br>of Washington</h2>
+  <div class="boot-sub">Eastside Culinary Command &nbsp;//&nbsp; <span data-count></span> Targets Acquired</div>
+  <div class="boot-row">
+    <button class="bigbtn" id="engage">▶ Engage — Sound On</button>
+    <button class="bigbtn ghost" id="silent">Enter Silently</button>
+  </div>
+  <div class="boot-sub" style="opacity:.5;font-size:9px">Audio is original synthesized score. Headphones recommended, Professor.</div>
+</div>
+
+<div class="wrap">
+
+<!-- ═══════════ HEADER ═══════════ -->
+<header class="hud">
+  <svg class="emblem" viewBox="0 0 100 100" aria-hidden="true">
+    <defs><linearGradient id="hg1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffd08a"/><stop offset="1" stop-color="#ff8c14"/></linearGradient></defs>
+    <path d="M50 5 L88 26 L88 68 L50 95 L12 68 L12 26 Z" fill="none" stroke="url(#hg1)" stroke-width="3"/>
+    <path d="M34 40 h32 M34 40 q0 16 16 24 q16 -8 16 -24" fill="none" stroke="url(#hg1)" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="50" cy="33" r="4.5" fill="url(#hg1)"/>
+    <path d="M42 52 h16" stroke="#3ad7ff" stroke-width="2.4" stroke-linecap="round"/>
+  </svg>
+  <div class="htext">
+    <h1>Jimmy's Taste of Washington</h1>
+    <div class="tagline">Eastside Culinary Command <span class="hl">//</span> Bellevue Sector <span class="hl">//</span> Clearance: <span class="hl">Professor Le</span></div>
+  </div>
+  <div class="hud-right">
+    <div class="readout">Targets<b id="rCount">—</b></div>
+    <div class="readout">Sectors<b id="secCount">—</b></div>
+    <button id="sndBtn" aria-pressed="false">
+      <span class="eq"><i></i><i></i><i></i><i></i></span><span id="sndTxt">Sound Off</span>
+    </button>
+  </div>
+</header>
+
+<div class="greet" id="greet"></div>
+
+<!-- ═══════════ FILTER CONSOLE ═══════════ -->
+<div class="console">
+  <div class="crow">
+    <div class="clabel">Supply</div>
+    <div class="chips" id="fMode"></div>
+    <input id="search" type="search" placeholder="SEARCH TARGET / DISH / CITY…" autocomplete="off">
+  </div>
+  <div class="crow">
+    <div class="clabel">Minerals</div>
+    <div class="chips" id="fPrice"></div>
+  </div>
+  <div class="crow">
+    <div class="clabel">Unit Type</div>
+    <div class="chips" id="fCat"></div>
+  </div>
+  <div class="crow">
+    <div class="clabel">Sector</div>
+    <div class="chips" id="fSector"></div>
+    <button class="mini" id="reset">✕ Clear All</button>
+  </div>
+</div>
+
+<!-- ═══════════ STAGE ═══════════ -->
+<div class="stage">
+  <div class="mapbox" id="mapbox">
+    <svg id="mapsvg" preserveAspectRatio="xMidYMid meet" aria-label="Tactical map of the Bellevue area"></svg>
+    <div id="pinlayer"></div>
+    <div class="mapctl" id="mapctl"></div>
+    <div class="maplegend" id="legend"></div>
+    <div class="mapcoord" id="coord">47.6101°N 122.2015°W</div>
+    <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+  </div>
+
+  <div class="dossier">
+    <div class="dsc" id="dossier"></div>
+    <div class="d-actions" id="dactions" style="display:none"></div>
+  </div>
+</div>
+
+<!-- ═══════════ ROSTER ═══════════ -->
+<div class="sectitle">Target Roster <span id="rosterCount"></span></div>
+<div class="grid" id="grid"></div>
+
+<footer>
+  Assembled for Professor Jimmy Binh Le &nbsp;·&nbsp; <span data-count></span> verified targets across Bellevue, Factoria, Bel-Red, Kirkland, Redmond, Renton &amp; Kent<br>
+  Original synthesized score &amp; SFX &nbsp;·&nbsp; Coordinates from U.S. Census geocoder &nbsp;·&nbsp; Verify hours before you deploy<br>
+  <span style="color:var(--amber)">You must construct additional appetite.</span>
+</footer>
+
+</div><!-- /wrap -->
+<div class="toast" id="toast"></div>
+</div><!-- /app -->
+
+<script>
+"use strict";
+/* ══════════════════════════════════════════════════════════════
+   1. DATA
+   ══════════════════════════════════════════════════════════════ */
+const CAT = {
+  DUMP : { name:"Dumplings & Buns", color:"#ffa62b" },
+  NOOD : { name:"Noodle Houses",    color:"#ff7043" },
+  SUSHI: { name:"Sushi & Poke",     color:"#3ad7ff" },
+  GRILL: { name:"Grill & BBQ",      color:"#ff5540" },
+  BOBA : { name:"Boba & Tea",       color:"#b98cff" },
+  COFF : { name:"Coffee",           color:"#c79a6b" },
+  BAKE : { name:"Bakery & Sweets",  color:"#ffd7e0" },
+  ST   : { name:"Street Eats",      color:"#5dff9f" },
+  ME   : { name:"Middle Eastern",   color:"#f2c14e" },
+  IND  : { name:"Indian",           color:"#ff9ecb" },
+  BUF  : { name:"Buffet & AYCE",    color:"#7cf5d8" }
+};
+const SECTOR = {
+  DT   : { name:"Bellevue Downtown", drive:"0–5 min" },
+  FAC  : { name:"Factoria",          drive:"~8 min"  },
+  BR   : { name:"Bel-Red",           drive:"~9 min"  },
+  KIRK : { name:"Kirkland",          drive:"~15 min" },
+  RED  : { name:"Redmond",           drive:"~18 min" },
+  REN  : { name:"Renton",            drive:"~18 min" },
+  KENT : { name:"Kent",              drive:"~25 min" }
+};
+
+const R = [
+{id:"doughzone",n:"Dough Zone Dumpling House",cat:"DUMP",sec:"DT",price:2,drink:false,
+ lat:47.61021,lon:-122.20274,addr:"10300 Main St, Suite E, Bellevue",
+ d:"The one that started it all — right here in Bellevue in 2014, before it spread down the entire West Coast. Fast, loud, always a wait, always worth it.",
+ orders:["Q-Bao (pan-fried pork buns)","Pork xiao long bao","Zha jiang noodles","Green onion pancake"],
+ tags:["Chinese","Soup Dumplings","Group","Local Origin"],
+ intel:"Founded 2014 by Jason & Nancy Zhai. Now operating in WA, OR, CA and TX. The old Crossroads branch has closed — this Main St location is the downtown one."},
+
+{id:"mecrepe",n:"Me + Crêpe",cat:"ST",sec:"DT",price:1,drink:false,
+ lat:47.61570,lon:-122.20130,addr:"2033 Bellevue Square, 2nd floor, Bellevue",
+ d:"A tiny jianbing counter hiding upstairs in Bellevue Square between The Body Shop and Royce. Chinese street crepe folded to order with a crispy wonton cracked inside.",
+ orders:["Peking Duck jianbing","Origin Crepe (egg, wonton, soybean paste)","Spicy crawfish crepe"],
+ tags:["Chinese","Quick Bite","Mall","Under $15"],
+ intel:"Four or five two-tops, that's it. Sometimes listed under the parent name 'Hi Duck'. Best solo lunch in the mall."},
+
+{id:"chicha",n:"CHICHA San Chen",cat:"BOBA",sec:"DT",price:1,drink:true,
+ lat:47.61700,lon:-122.20280,addr:"188 Bellevue Square (level 1, near Macy's), Bellevue",
+ d:"Taiwanese tea house that brews loose-leaf to order with a machine engineered to mimic a hand pour. This is the boba shop for someone who actually cares about the tea.",
+ orders:["Brown sugar boba fresh milk","Dong Ding Oolong","Cassia black tea","Osmanthus oolong + mango"],
+ tags:["Taiwanese","Drinks","Mall","Award Tea"],
+ intel:"Founded Taichung 1998. Their Dong Ding Oolong has been recognized at the Brussels International Taste Institute. Relocated inside Bellevue Square in Feb 2025."},
+
+{id:"teabydo",n:"TeaByDo (茶百道)",cat:"BOBA",sec:"DT",price:1,drink:true,
+ lat:47.61993,lon:-122.20276,addr:"1075 Bellevue Way NE, Suite B-3 (Belgate Plaza), Bellevue",
+ d:"Panda-branded megachain out of Chengdu that quietly became one of the biggest tea companies on earth. Cheap, sweet, extremely photogenic cups.",
+ orders:["Taro ball milk tea","Mango pomelo sago","Watermelon tea smoothie with jelly"],
+ tags:["Chinese","Drinks","Under $15","New Arrival"],
+ intel:"8,700+ locations worldwide, founded Chengdu 2008. This is one of its newer U.S. beachheads."},
+
+{id:"tanoor",n:"Tanoor",cat:"ME",sec:"DT",price:2,drink:false,
+ lat:47.61920,lon:-122.19107,addr:"989 112th Ave NE, Suite 105, Bellevue",
+ d:"Lebanese family kitchen baking its own pita in a tanoor oven on site — you can smell it from the sidewalk. The only place on this map where bread is the main event.",
+ orders:["Chicken shawarma wrap","Mixed grill platter","Mezze spread with fresh pita","Kafta kabob"],
+ tags:["Lebanese","Halal","Wraps","Vegetarian-Friendly"],
+ intel:"Third Tanoor location after Seattle's Dexter Ave and Sammamish. Opened downtown around July 2024."},
+
+{id:"fob",n:"FOB Poke & Sushi Bar",cat:"SUSHI",sec:"DT",price:2,drink:false,
+ lat:47.61326,lon:-122.19632,addr:"333 108th Ave NE (lower level), Bellevue",
+ d:"Self-serve poke and sushi sold by the pound in the basement of the old Expedia HQ. Build it, weigh it, eat it in eleven minutes. Best speed-to-lunch ratio downtown.",
+ orders:["Build-your-own spicy ahi bowl","Salmon poke by the pound","Grab-and-go rolls"],
+ tags:["Japanese","Hawaiian","Quick Lunch","By the Pound"],
+ intel:"Seattle-area chain established 2017, roughly $14–16/lb. Note: this and the Belltown branch voluntarily closed for two weeks in late 2024 over food-handling concerns — worth a fresh look at recent reviews."},
+
+{id:"frenchbakery",n:"The French Bakery",cat:"BAKE",sec:"DT",price:1,drink:false,
+ lat:47.61843,lon:-122.19108,addr:"909 112th Ave NE, Suite 106, Bellevue",
+ d:"Started in 2005 as a wholesale bakery and eventually opened its own doors. Croissants, macarons, and sandwiches on bread that is actually bread.",
+ orders:["Almond croissant","Macarons","Ham & brie baguette","Fruit tart"],
+ tags:["French","Pastry","Breakfast","Under $15"],
+ intel:"Three cafés now: downtown Bellevue, Crossroads, and downtown Redmond. The Crossroads location is a different address — don't get sent across town."},
+
+{id:"santouka",n:"Hokkaido Ramen Santouka",cat:"NOOD",sec:"DT",price:2,drink:false,
+ lat:47.61128,lon:-122.20162,addr:"103 Bellevue Way NE, Suite 3, Bellevue",
+ d:"Descendant of a nine-seat shop that opened in Asahikawa, Hokkaido in 1988 serving exactly one thing. The shio ramen is still the reason to come — milky tonkotsu, one pink pickled plum floating on top.",
+ orders:["Shio ramen","Toroniku (pork cheek) add-on","Gyoza","Karaage"],
+ tags:["Japanese","Ramen","Solo","Rainy Day"],
+ intel:"Order the shio, not the tonkotsu — it's the founding recipe and what the whole chain is built on."},
+
+{id:"dintaifung",n:"Din Tai Fung",cat:"DUMP",sec:"DT",price:3,drink:false,
+ lat:47.61737,lon:-122.20092,addr:"10455 NE 8th St (Lincoln Square North, 1st floor), Bellevue",
+ d:"Eighteen folds per soup dumpling, measured. Moved in April 2024 into a 17,000 sq ft space with a glass-walled dumpling kitchen you can stand and watch. Book 30 days out or accept your fate in the lobby.",
+ orders:["Kurobuta pork xiao long bao","Truffle & pork xiao long bao","Garlic green beans","Chicken fried rice"],
+ tags:["Taiwanese","Soup Dumplings","Special Occasion","Reserve Ahead"],
+ intel:"CORRECTION: it is no longer in Bellevue Square — it's in Lincoln Square North as of April 2024. New space designed by Rockwell Group."},
+
+{id:"kobe",n:"Kobe",cat:"GRILL",sec:"DT",price:2,drink:false,
+ lat:47.61781,lon:-122.19354,addr:"850 110th Ave NE (in the Courtyard Marriott), Bellevue",
+ d:"A sprawling pan-Asian menu inside a hotel: sushi, teriyaki, hot pot, Korean BBQ and pad thai under one roof. Not precious. Perfect for a group that cannot agree on anything.",
+ orders:["White Dragon roll","Hot pot bibimbap","Teriyaki chicken with yakisoba"],
+ tags:["Japanese","Korean","Teriyaki","Group","Something for Everyone"],
+ intel:"Open Mon–Sat 11am–11pm, closed Sundays. One of the later kitchens downtown."},
+
+{id:"story",n:"Story Coffee",cat:"COFF",sec:"DT",price:1,drink:true,
+ lat:47.61791,lon:-122.19243,addr:"11011 NE 9th St, Suite B, Bellevue",
+ d:"Independent and woman-owned, opened 2023. Real seating, real latte art, open-mic nights. The downtown café where you can actually sit down and stay a while.",
+ orders:["Signature latte","Seasonal tea","Pastry of the day"],
+ tags:["Cafe","Work Spot","Drinks","Independent"],
+ intel:"Hosts community events including open mics. A rare non-chain in a downtown full of chains."},
+
+{id:"xcj",n:"Xiao Chi Jie (小吃街)",cat:"ST",sec:"DT",price:1,drink:false,
+ lat:47.61274,lon:-122.19879,addr:"278 106th Ave NE (Urban Mix food hall, SOMA Towers), Bellevue",
+ d:"Shanghainese hawker food run fast-casual, founded by a Bellevue native. The sheng jian bao — pan-fried soup buns with a crackly bottom — are the whole point.",
+ orders:["Sheng jian bao (pan-fried soup buns)","Dan dan noodles","Jianbing","Lu rou fan"],
+ tags:["Shanghainese","Quick Bite","Under $15","Takeout Kits"],
+ intel:"Founded by Jennifer Liao and Caleb Wang with the owners of Just Poké. Also sells take-home xiao long bao kits."},
+
+{id:"heytea",n:"HEYTEA (喜茶)",cat:"BOBA",sec:"DT",price:1,drink:true,
+ lat:47.61646,lon:-122.19355,addr:"700 110th Ave NE, Suite 192 (The Bravern), Bellevue",
+ d:"Shenzhen's 'new-style tea' giant — real fruit, salted cheese foam on top, glossy minimal branding. This was the first HEYTEA in Washington State.",
+ orders:["Cheese Grape Boom","Coconut Mango Boom","Supreme Brown Sugar Bobo milk tea"],
+ tags:["Chinese","Drinks","Cheese Foam","First in WA"],
+ intel:"Opened summer 2024 inside The Bravern. Get the cheese foam — it's the signature, not a gimmick."},
+
+{id:"mamaxita",n:"Mama Xita BBQ",cat:"GRILL",sec:"DT",price:3,drink:false,
+ lat:47.61512,lon:-122.19884,addr:"550 106th Ave NE, Suite 101, Bellevue",
+ d:"Despite the name: not Mexican. This is Chinese-Korean wagyu barbecue — 450+ locations across Asia, and this is the brand's first store in the United States.",
+ orders:["Wagyu assortment platter","Signature marinated short rib","House banchan spread"],
+ tags:["Chinese","Korean","Wagyu","Group","Splurge"],
+ intel:"Operated by Chubby Group; the brand runs 450+ locations in 31 Asian cities with 20+ years of history. The name fools everyone — tell Jimmy before he shows up expecting tacos."},
+
+{id:"north",n:"North — All-You-Can-Eat Dumplings",cat:"DUMP",sec:"FAC",price:2,drink:false,
+ lat:47.57660,lon:-122.17052,addr:"12708 SE 38th St, Bellevue (Factoria)",
+ d:"Dumplings folded by hand on site, and $18.99 buys as many as you can physically hold. The correct answer to 'I'm really hungry and I have $20.'",
+ orders:["AYCE pork & chive dumplings","Shrimp dumplings","Lamb spine hot pot","Cold pork noodles"],
+ tags:["Chinese","AYCE","Group","Best Value"],
+ intel:"Closed Mondays and Tuesdays. Not to be confused with 'The Northern Dumplings' on Bel-Red — different restaurant entirely."},
+
+{id:"labean",n:"La'bean",cat:"COFF",sec:"FAC",price:1,drink:true,
+ lat:47.57675,lon:-122.17096,addr:"12668 SE 38th St, Bellevue (Factoria)",
+ d:"A brand-new Vietnamese coffee bar doing cà phê sữa đá properly, plus a handful of drinks you genuinely won't find anywhere else on the Eastside.",
+ orders:["Cà phê sữa đá","Ube & peanut coffee","Velvet brûlée","Matcha strawberry latte"],
+ tags:["Vietnamese","Drinks","Under $15","New 2025"],
+ intel:"Opened 2025 in the Factoria strip. Free WiFi. The ube & peanut is the signature — order it even if it sounds strange."},
+
+{id:"omiya",n:"Sushi Omiya",cat:"SUSHI",sec:"FAC",price:2,drink:false,
+ lat:47.57541,lon:-122.16937,addr:"3928 Factoria Square Mall SE, Suite B4, Bellevue",
+ d:"Conveyor-belt sushi with a little monorail that drives your order to the table. Plates from $3.45. Objectively the most fun per dollar on this entire map.",
+ orders:["Mango salmon roll","Salmon nigiri","Chicken karaage","Tonkotsu chashu udon"],
+ tags:["Japanese","Conveyor Belt","Family","Free Parking"],
+ intel:"Small regional chain with a second location in Tukwila. Free mall parking — rare advantage over downtown."},
+
+{id:"doughsavor",n:"Dough Savor",cat:"BAKE",sec:"BR",price:1,drink:false,
+ lat:47.62784,lon:-122.14684,addr:"14505 NE 20th St, Suite M (Asian Family Market food court), Bellevue",
+ d:"A Chinese breakfast counter inside a grocery food court. Youtiao and hot soy milk, jianbing, savory tofu pudding. The cheapest genuinely good meal on this map.",
+ orders:["Youtiao + fresh soy milk","Jianbing","Pan-fried beef bao","Savory tofu pudding"],
+ tags:["Chinese","Breakfast","Under $15","Food Court"],
+ intel:"Inside the market food court, not a standalone storefront. Reviews favor the buns and pastries over the dumplings. Can get a long line on weekend mornings."},
+
+{id:"southernspice",n:"Southern Spice",cat:"IND",sec:"BR",price:2,drink:false,
+ lat:47.63159,lon:-122.13910,addr:"15112 NE 24th St, Redmond (Bel-Red corridor)",
+ d:"Widely argued to be the best biryani on the Eastside. South Indian at the core with a North Indian menu bolted on and a daily lunch buffet.",
+ orders:["Chicken biryani","Karam podi chicken fry","Dynamite gobi","Dosa"],
+ tags:["South Indian","Biryani","Halal","Lunch Buffet","Vegetarian-Friendly"],
+ intel:"Brands itself 'Southern Spice Bellevue' but the municipal address is Redmond, right on the line. The old E Lake Sammamish Pkwy location is closed."},
+
+{id:"seoulmeat",n:"Seoul Meat Co.",cat:"GRILL",sec:"KIRK",price:3,drink:false,
+ lat:47.71156,lon:-122.17905,addr:"12600 120th Ave NE, Suite 146 (Village at Totem Lake), Kirkland",
+ d:"All-you-can-eat Korean BBQ with a grill built into every table. Two-hour limit, three meat orders at a time, no reservations. Show up hungry and early.",
+ orders:["Marinated short rib","Spicy pork belly","Brisket","Beef belly + full banchan"],
+ tags:["Korean","AYCE","Group","Walk-In Only"],
+ intel:"Roughly $39–45 per person depending on the day. First-come first-served — the Friday and Saturday queues are real."},
+
+{id:"kobuta",n:"Kobuta & Ookami Katsu and Sake House",cat:"GRILL",sec:"RED",price:3,drink:false,
+ lat:47.67280,lon:-122.11216,addr:"17026 Avondale Way NE, Unit A, Redmond",
+ d:"Three siblings running a tonkatsu specialist and sake bar. The curry has dark chocolate in the sauce. The Seattle Times called it the best place in the region to pork out.",
+ orders:["Kurobuta katsu","Iberico katsu","Katsu curry (dark chocolate sauce)","Mozzarella katsu"],
+ tags:["Japanese","Katsu","Date Night","Sake Bar","Splurge"],
+ intel:"Family-owned by the Tandavanitj siblings; started on Capitol Hill before opening here. Reservations only for parties of 6+. Entrées run $21–34."},
+
+{id:"feast",n:"Feast Buffet",cat:"BUF",sec:"REN",price:3,drink:false,
+ lat:47.47620,lon:-122.21707,addr:"485 Renton Center Way SW, Renton",
+ d:"One of the largest buffets in Washington State. Sushi, dim sum, hibachi, Mongolian BBQ — and snow crab legs plus lobster claws on Friday through Sunday dinner only.",
+ orders:["King snow crab legs (Fri–Sun dinner)","Lobster claws","Dim sum station","Mongolian BBQ"],
+ tags:["Asian Buffet","Crab","Group","Go Hungry"],
+ intel:"Lunch ~$27, dinner ~$39+, weekend crab dinners reported up to $45. It's in Renton Shopping Center anchored by Fred Meyer — not near a 99 Ranch."},
+
+{id:"champion",n:"Champion Gourmet Taiwanese Cafe",cat:"ST",sec:"KENT",price:1,drink:false,
+ lat:47.43900,lon:-122.22204,addr:"18230 E Valley Hwy, Suite 122 (Great Wall Shopping Mall), Kent",
+ d:"Taiwanese breakfast and comfort food tucked inside the 99 Ranch mall in Kent. The farthest target on this map and the one most worth the drive if lu rou fan is your thing.",
+ orders:["Lu rou fan (braised pork rice)","Beef noodle soup","Taiwanese breakfast set","Zongzi"],
+ tags:["Taiwanese","Breakfast","Boba","Under $15","Worth the Drive"],
+ intel:"Listed as 'Champion Gourmet' — your note said 'Champino', which appears to be a mis-transcription. Great Wall Shopping Mall has been running since 1999; make a grocery run while you're there."},
+
+{id:"phobac",n:"Pho Bac Cafe",cat:"NOOD",sec:"KENT",price:2,drink:false,
+ lat:47.43971,lon:-122.22149,addr:"18119 E Valley Hwy, Suite 102, Kent",
+ d:"A no-frills mom-and-pop pho counter on East Valley Highway that people in Kent, Renton and Tukwila will argue has the best broth in the south end. Nothing fancy, nothing trying too hard — just the soup.",
+ orders:["Phở tái nạm (rare steak + brisket)","#28 — bún with grilled pork","Cơm dĩa rice plates","Chè Thái"],
+ tags:["Vietnamese","Pho","Solo","Rainy Day","Worth the Drive"],
+ intel:"Open daily 10am–8pm (a few delivery apps list 10–9; trust the shorter hours). Despite the name, no connection was found to the Phở Bắc chain in Seattle's Chinatown-ID — this looks like an independent business. Cards accepted, private lot parking, no reservations, no alcohol."},
+
+{id:"happynoodles",n:"Happy Noodles",cat:"NOOD",sec:"KENT",price:2,drink:false,
+ lat:47.43992,lon:-122.22106,addr:"18126 E Valley Hwy, Kent",
+ d:"Sichuan hand-made noodles cooked by owners who are actually from Sichuan. Huge portions, real heat, and a menu that runs well past noodles into braised duck, pork hock and hot pot.",
+ orders:["Spicy dan dan noodles","Spicy beef noodle soup","Cold noodles with peanuts","Braised pork hock","Spicy beef hotpot vermicelli"],
+ tags:["Sichuan","Chinese","Spicy","Big Portions","Hidden Gem"],
+ intel:"Closed Mondays; Tue–Sun 11am–8:30pm. A rebrand of the old 'Noodle House' at the same address and phone. Most dishes run $13–19, hot pot $32.99. Sits directly across East Valley Hwy from Pho Bac Cafe, with Champion Gourmet a block south — three targets inside 200 metres, so Kent is worth one combined trip."}
+];
+
+const PRICE_LABEL = {1:"$",2:"$$",3:"$$$"};
+const PRICE_DESC  = {1:"Under $15",2:"$15–30",3:"$30–60"};
+
+/* ══════════════════════════════════════════════════════════════
+   2. AUDIO ENGINE — original synthesized score + SFX
+   ══════════════════════════════════════════════════════════════ */
+const Audio8 = (function(){
+  let ctx=null, master=null, musicBus=null, sfxBus=null, comp=null;
+  let running=false, timer=null, step=0, nextTime=0, started=false;
+  const BPM=132, SPB=60/BPM, S16=SPB/4, LOOK=0.10, AHEAD=0.22;
+
+  const SEMI={C:0,"C#":1,D:2,"D#":3,E:4,F:5,"F#":6,G:7,"G#":8,A:9,"A#":10,B:11};
+  function f(n){const m=/^([A-G]#?)(-?\d+)$/.exec(n);if(!m)return 440;
+    return 440*Math.pow(2,(SEMI[m[1]]+(parseInt(m[2],10)-4)*12-9)/12);}
+
+  // i - VI - III - VII in D minor, 8 bars
+  const CHORDS=[
+    {r:"D2",  v:["D3","F3","A3"]},
+    {r:"D2",  v:["D3","F3","A3"]},
+    {r:"A#1", v:["A#2","D3","F3"]},
+    {r:"C2",  v:["C3","E3","G3"]},
+    {r:"D2",  v:["D3","F3","A3"]},
+    {r:"F2",  v:["F2","A2","C3"]},
+    {r:"A#1", v:["A#2","D3","F3"]},
+    {r:"C2",  v:["C3","G3","A#3"]}
+  ];
+  const KICK=[0,4,7,8,12,14];
+  const SNARE=[4,12];
+  const HAT=[0,2,4,6,8,10,12,14];
+  const BASS=[1,0,1,1, 0,1,1,0, 1,0,1,1, 0,1,0,1];
+  const STAB=[0,6,10];
+  // melody: [absStepInLoop(0..127), note, durIn16ths]
+  const MEL=[
+    [64,"D4",6],[70,"F4",2],[72,"A4",6],[78,"G4",2],
+    [80,"F4",4],[84,"D4",4],[88,"A#3",6],[94,"C4",2],
+    [96,"D4",4],[100,"F4",4],[104,"A4",8],
+    [112,"G4",4],[116,"F4",4],[120,"D4",8]
+  ];
+  let noiseBuf=null;
+
+  let dead=false;   // set if the audio graph can't be built — app keeps working silently
+  function ensure(){
+    if(ctx) return ctx;
+    if(dead) return null;
+    try{
+      const AC = window.AudioContext||window.webkitAudioContext;
+      if(!AC){ dead=true; return null; }
+      ctx=new AC();
+      comp=ctx.createDynamicsCompressor();
+      comp.threshold.value=-14; comp.knee.value=22; comp.ratio.value=7;
+      comp.attack.value=0.004; comp.release.value=0.22;
+      master=ctx.createGain(); master.gain.value=0.0;
+      musicBus=ctx.createGain(); musicBus.gain.value=0.5;
+      sfxBus=ctx.createGain(); sfxBus.gain.value=0.72;
+      musicBus.connect(comp); sfxBus.connect(comp); comp.connect(master); master.connect(ctx.destination);
+      const n=ctx.sampleRate*2; noiseBuf=ctx.createBuffer(1,n,ctx.sampleRate);
+      const d=noiseBuf.getChannelData(0);
+      for(let i=0;i<n;i++) d[i]=Math.random()*2-1;
+      return ctx;
+    }catch(e){
+      // Blocked by policy, an extension, or an unsupported embed. Go silent, stay usable.
+      console.warn("Audio unavailable:",e);
+      dead=true; ctx=null; master=null; musicBus=null; sfxBus=null;
+      return null;
+    }
+  }
+  function noise(){const s=ctx.createBufferSource();s.buffer=noiseBuf;s.loop=true;return s;}
+
+  /* ---- drums ---- */
+  function kick(t,g=1){
+    const o=ctx.createOscillator(),a=ctx.createGain();
+    o.type="sine"; o.frequency.setValueAtTime(150,t);
+    o.frequency.exponentialRampToValueAtTime(42,t+0.10);
+    a.gain.setValueAtTime(0.0001,t);
+    a.gain.exponentialRampToValueAtTime(0.9*g,t+0.005);
+    a.gain.exponentialRampToValueAtTime(0.0001,t+0.30);
+    o.connect(a); a.connect(musicBus); o.start(t); o.stop(t+0.34);
+    const c=ctx.createOscillator(),cg=ctx.createGain();
+    c.type="triangle"; c.frequency.setValueAtTime(700,t);
+    c.frequency.exponentialRampToValueAtTime(90,t+0.03);
+    cg.gain.setValueAtTime(0.28*g,t); cg.gain.exponentialRampToValueAtTime(0.0001,t+0.05);
+    c.connect(cg); cg.connect(musicBus); c.start(t); c.stop(t+0.06);
+  }
+  function snare(t,g=1){
+    const s=noise(),bp=ctx.createBiquadFilter(),a=ctx.createGain();
+    bp.type="bandpass"; bp.frequency.value=1900; bp.Q.value=0.8;
+    a.gain.setValueAtTime(0.42*g,t); a.gain.exponentialRampToValueAtTime(0.0001,t+0.17);
+    s.connect(bp); bp.connect(a); a.connect(musicBus); s.start(t); s.stop(t+0.2);
+    const o=ctx.createOscillator(),og=ctx.createGain();
+    o.type="triangle"; o.frequency.setValueAtTime(220,t);
+    o.frequency.exponentialRampToValueAtTime(140,t+0.08);
+    og.gain.setValueAtTime(0.22*g,t); og.gain.exponentialRampToValueAtTime(0.0001,t+0.12);
+    o.connect(og); og.connect(musicBus); o.start(t); o.stop(t+0.14);
+  }
+  function hat(t,open,g=1){
+    const s=noise(),hp=ctx.createBiquadFilter(),a=ctx.createGain();
+    hp.type="highpass"; hp.frequency.value=7600;
+    const dur=open?0.15:0.035;
+    a.gain.setValueAtTime(0.16*g,t); a.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    s.connect(hp); hp.connect(a); a.connect(musicBus); s.start(t); s.stop(t+dur+0.02);
+  }
+  function taiko(t,g=1){
+    const o=ctx.createOscillator(),a=ctx.createGain();
+    o.type="sine"; o.frequency.setValueAtTime(96,t);
+    o.frequency.exponentialRampToValueAtTime(58,t+0.18);
+    a.gain.setValueAtTime(0.55*g,t); a.gain.exponentialRampToValueAtTime(0.0001,t+0.34);
+    o.connect(a); a.connect(musicBus); o.start(t); o.stop(t+0.36);
+  }
+  /* ---- pitched ---- */
+  function bass(t,note,dur){
+    const o=ctx.createOscillator(),o2=ctx.createOscillator(),lp=ctx.createBiquadFilter(),a=ctx.createGain();
+    o.type="sawtooth"; o2.type="square";
+    o.frequency.value=f(note); o2.frequency.value=f(note)/2;
+    lp.type="lowpass"; lp.frequency.setValueAtTime(460,t);
+    lp.frequency.exponentialRampToValueAtTime(180,t+dur); lp.Q.value=6;
+    a.gain.setValueAtTime(0.0001,t);
+    a.gain.linearRampToValueAtTime(0.34,t+0.008);
+    a.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    o.connect(lp); o2.connect(lp); lp.connect(a); a.connect(musicBus);
+    o.start(t); o2.start(t); o.stop(t+dur+0.02); o2.stop(t+dur+0.02);
+  }
+  function stab(t,notes,dur){
+    const lp=ctx.createBiquadFilter(),a=ctx.createGain();
+    lp.type="lowpass"; lp.Q.value=9;
+    lp.frequency.setValueAtTime(3400,t);
+    lp.frequency.exponentialRampToValueAtTime(520,t+dur*0.9);
+    a.gain.setValueAtTime(0.0001,t);
+    a.gain.linearRampToValueAtTime(0.13,t+0.01);
+    a.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    lp.connect(a); a.connect(musicBus);
+    notes.forEach((n,i)=>{
+      [0,-6,6].forEach(det=>{
+        const o=ctx.createOscillator();
+        o.type="sawtooth"; o.frequency.value=f(n); o.detune.value=det+(i*1.5);
+        o.connect(lp); o.start(t); o.stop(t+dur+0.03);
+      });
+    });
+  }
+  function pad(t,notes,dur){
+    const lp=ctx.createBiquadFilter(),a=ctx.createGain();
+    lp.type="lowpass"; lp.frequency.value=900; lp.Q.value=1.2;
+    a.gain.setValueAtTime(0.0001,t);
+    a.gain.linearRampToValueAtTime(0.055,t+dur*0.35);
+    a.gain.linearRampToValueAtTime(0.0001,t+dur);
+    lp.connect(a); a.connect(musicBus);
+    notes.forEach(n=>[-9,9].forEach(det=>{
+      const o=ctx.createOscillator(); o.type="sawtooth";
+      o.frequency.value=f(n); o.detune.value=det;
+      o.connect(lp); o.start(t); o.stop(t+dur+0.05);
+    }));
+  }
+  function lead(t,note,dur){
+    const o=ctx.createOscillator(),o2=ctx.createOscillator(),lp=ctx.createBiquadFilter(),a=ctx.createGain();
+    o.type="sawtooth"; o2.type="square";
+    o.frequency.value=f(note); o2.frequency.value=f(note); o2.detune.value=7;
+    lp.type="lowpass"; lp.frequency.setValueAtTime(1500,t);
+    lp.frequency.linearRampToValueAtTime(2900,t+0.09);
+    lp.frequency.linearRampToValueAtTime(1100,t+dur); lp.Q.value=3;
+    a.gain.setValueAtTime(0.0001,t);
+    a.gain.linearRampToValueAtTime(0.115,t+0.035);
+    a.gain.setValueAtTime(0.105,t+dur*0.7);
+    a.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    o.connect(lp); o2.connect(lp); lp.connect(a); a.connect(musicBus);
+    o.start(t); o2.start(t); o.stop(t+dur+0.03); o2.stop(t+dur+0.03);
+  }
+
+  function scheduleStep(s,t){
+    const bar=Math.floor(s/16)%8, k=s%16, ch=CHORDS[bar];
+    if(KICK.indexOf(k)>-1) kick(t, k===0?1:0.82);
+    if(SNARE.indexOf(k)>-1) snare(t,0.9);
+    if(HAT.indexOf(k)>-1) hat(t, k===14, k%4===0?1:0.66);
+    if(k===0 && (bar===0||bar===4)) taiko(t,0.7);
+    if(k===0) pad(t,ch.v,SPB*4);
+    if(BASS[k]) bass(t, (k===8||k===13)?ch.r.replace(/\d/,m=>String(+m+1)):ch.r, S16*1.7);
+    if(STAB.indexOf(k)>-1 && bar>=1) stab(t,ch.v,S16*2.0);
+    const abs=s%128;
+    for(const m of MEL) if(m[0]===abs) lead(t,m[1],S16*m[2]*0.92);
+  }
+  function tick(){
+    if(!running) return;
+    while(nextTime < ctx.currentTime + AHEAD){
+      scheduleStep(step,nextTime);
+      nextTime += S16; step=(step+1)%128;
+    }
+    timer=setTimeout(tick, LOOK*1000);
+  }
+
+  /* ---- SFX ---- */
+  let lastHover=0;
+  function blip(t,fr,to,dur,type,vol){
+    const o=ctx.createOscillator(),a=ctx.createGain();
+    o.type=type||"sine";
+    o.frequency.setValueAtTime(fr,t);
+    o.frequency.exponentialRampToValueAtTime(Math.max(30,to),t+dur);
+    a.gain.setValueAtTime(0.0001,t);
+    a.gain.exponentialRampToValueAtTime(vol||0.11,t+0.008);
+    a.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    o.connect(a); a.connect(sfxBus); o.start(t); o.stop(t+dur+0.02);
+  }
+  function sweep(t,dur,fr,to,vol){
+    const s=noise(),bp=ctx.createBiquadFilter(),a=ctx.createGain();
+    bp.type="bandpass"; bp.Q.value=5;
+    bp.frequency.setValueAtTime(fr,t);
+    bp.frequency.exponentialRampToValueAtTime(to,t+dur);
+    a.gain.setValueAtTime(vol||0.10,t);
+    a.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    s.connect(bp); bp.connect(a); a.connect(sfxBus); s.start(t); s.stop(t+dur+0.02);
+  }
+  const SFX={
+    hover(){ if(!ctx||master.gain.value<0.01) return;
+      const now=performance.now(); if(now-lastHover<55) return; lastHover=now;
+      blip(ctx.currentTime,1180,1760,0.055,"sine",0.045); },
+    click(){ if(!ctx||master.gain.value<0.01) return;
+      const t=ctx.currentTime; blip(t,760,760,0.05,"square",0.075); blip(t+0.045,1140,1140,0.07,"square",0.065); },
+    select(){ if(!ctx||master.gain.value<0.01) return;
+      const t=ctx.currentTime;
+      blip(t,520,1560,0.10,"triangle",0.10); blip(t+0.06,1560,2340,0.12,"sine",0.07);
+      sweep(t,0.17,900,4200,0.055); },
+    toggle(on){ if(!ctx||master.gain.value<0.01) return;
+      const t=ctx.currentTime;
+      if(on){ blip(t,440,880,0.08,"square",0.08); blip(t+0.07,880,1320,0.09,"square",0.06); }
+      else  { blip(t,880,440,0.09,"square",0.07); }
+      sweep(t,0.12,2000,600,0.04); },
+    zoom(){ if(!ctx||master.gain.value<0.01) return;
+      const t=ctx.currentTime; sweep(t,0.28,400,3600,0.075); blip(t,300,900,0.2,"sine",0.05); },
+    deny(){ if(!ctx||master.gain.value<0.01) return;
+      const t=ctx.currentTime; blip(t,240,150,0.16,"sawtooth",0.09); blip(t+0.12,200,120,0.18,"sawtooth",0.07); },
+    boot(){ if(!ctx) return;
+      const t=ctx.currentTime;
+      sweep(t,0.9,180,5200,0.10);
+      ["D3","A3","D4","F4","A4"].forEach((n,i)=>{
+        const o=ctx.createOscillator(),a=ctx.createGain();
+        o.type="triangle"; o.frequency.value=f(n);
+        a.gain.setValueAtTime(0.0001,t+i*0.07);
+        a.gain.exponentialRampToValueAtTime(0.10,t+i*0.07+0.02);
+        a.gain.exponentialRampToValueAtTime(0.0001,t+i*0.07+0.85);
+        o.connect(a); a.connect(sfxBus); o.start(t+i*0.07); o.stop(t+i*0.07+0.9);
+      });
+      taiko(t+0.55,0.8); taiko(t+0.78,0.6);
+    }
+  };
+
+  return {
+    init(){ return ensure(); },
+    async on(musicDelay){
+      ensure(); if(!ctx) return false;
+      if(ctx.state==="suspended") { try{ await ctx.resume(); }catch(e){} }
+      master.gain.cancelScheduledValues(ctx.currentTime);
+      master.gain.setValueAtTime(Math.max(0.0001,master.gain.value), ctx.currentTime);
+      master.gain.setTargetAtTime(0.80, ctx.currentTime, 0.12);
+      const d = musicDelay||0;
+      const go=()=>{ if(!ctx) return;
+        if(!running){ running=true; step=0; nextTime=ctx.currentTime+0.10; tick(); } };
+      if(d) setTimeout(go, d*1000); else go();
+      started=true; return true;
+    },
+    off(){ if(!ctx) return;
+      master.gain.cancelScheduledValues(ctx.currentTime);
+      master.gain.setTargetAtTime(0.0, ctx.currentTime, 0.22);
+      setTimeout(()=>{ if(master && master.gain.value<0.02){ running=false; if(timer) clearTimeout(timer); } },700);
+    },
+    isOn(){ return !!ctx && master && master.gain.value>0.05; },
+    sfx:SFX
+  };
+})();
+
+/* ══════════════════════════════════════════════════════════════
+   3. MAP GEOMETRY
+   ══════════════════════════════════════════════════════════════ */
+const B = { lonMin:-122.42, lonMax:-122.00, latMin:47.40, latMax:47.74 };
+const MW = 1000, MH = 1198;
+const PX = lon => (lon - B.lonMin)/(B.lonMax-B.lonMin)*MW;
+const PY = lat => (B.latMax - lat)/(B.latMax-B.latMin)*MH;
+const path = (pts,close) => pts.map((p,i)=>(i?"L":"M")+PX(p[0]).toFixed(1)+" "+PY(p[1]).toFixed(1)).join(" ")+(close?" Z":"");
+
+const LAKE_WA=[[-122.2560,47.7210],[-122.2400,47.7130],[-122.2330,47.6980],[-122.2230,47.6850],[-122.2130,47.6700],[-122.2090,47.6560],[-122.2140,47.6480],[-122.2260,47.6410],[-122.2230,47.6300],[-122.2120,47.6220],[-122.2060,47.6100],[-122.2055,47.5960],[-122.2020,47.5830],[-122.2010,47.5680],[-122.2060,47.5520],[-122.2130,47.5300],[-122.2080,47.5130],[-122.2170,47.5020],[-122.2400,47.5060],[-122.2510,47.5180],[-122.2570,47.5340],[-122.2540,47.5480],[-122.2620,47.5600],[-122.2680,47.5720],[-122.2760,47.5880],[-122.2830,47.6030],[-122.2840,47.6180],[-122.2790,47.6320],[-122.2740,47.6450],[-122.2640,47.6560],[-122.2600,47.6680],[-122.2530,47.6790],[-122.2580,47.6900],[-122.2700,47.6990],[-122.2760,47.7100],[-122.2680,47.7190]];
+const MERCER=[[-122.2360,47.6050],[-122.2240,47.5980],[-122.2170,47.5880],[-122.2190,47.5750],[-122.2260,47.5620],[-122.2330,47.5520],[-122.2450,47.5490],[-122.2540,47.5570],[-122.2580,47.5700],[-122.2560,47.5830],[-122.2510,47.5940],[-122.2430,47.6030]];
+const LAKE_SAM=[[-122.1240,47.6480],[-122.1080,47.6420],[-122.0980,47.6300],[-122.0900,47.6150],[-122.0810,47.6000],[-122.0720,47.5850],[-122.0670,47.5700],[-122.0680,47.5570],[-122.0780,47.5490],[-122.0880,47.5560],[-122.0960,47.5700],[-122.1040,47.5860],[-122.1130,47.6020],[-122.1200,47.6170],[-122.1270,47.6320],[-122.1300,47.6440]];
+const SOUND=[[-122.4200,47.7400],[-122.4050,47.7400],[-122.3980,47.7020],[-122.3900,47.6700],[-122.3980,47.6480],[-122.3850,47.6250],[-122.3450,47.6050],[-122.3400,47.5900],[-122.3750,47.5750],[-122.3860,47.5500],[-122.3960,47.5150],[-122.4060,47.4700],[-122.4200,47.4300]];
+const SAMM_PLATEAU=[[-122.0600,47.7400],[-122.0000,47.7400],[-122.0000,47.4000],[-122.0600,47.4000]];
+
+const ROADS=[
+ {n:"I-405",cls:"fw",p:[[-122.2150,47.4780],[-122.2020,47.4880],[-122.1920,47.5000],[-122.1870,47.5200],[-122.1850,47.5420],[-122.1810,47.5620],[-122.1810,47.5780],[-122.1880,47.5950],[-122.1880,47.6080],[-122.1870,47.6250],[-122.1860,47.6420],[-122.1870,47.6600],[-122.1880,47.6800],[-122.1850,47.7000],[-122.1830,47.7160],[-122.1900,47.7380]]},
+ {n:"I-90",cls:"fw",p:[[-122.4200,47.5950],[-122.3900,47.5920],[-122.3300,47.5910],[-122.3000,47.5905],[-122.2700,47.5900],[-122.2560,47.5905],[-122.2180,47.5875],[-122.1890,47.5860],[-122.1600,47.5850],[-122.1300,47.5840],[-122.1000,47.5830],[-122.0600,47.5770],[-122.0350,47.5480],[-122.0000,47.5340]]},
+ {n:"SR-520",cls:"fw",p:[[-122.4200,47.6470],[-122.3400,47.6440],[-122.3050,47.6430],[-122.2600,47.6410],[-122.2300,47.6395],[-122.2050,47.6385],[-122.1870,47.6375],[-122.1650,47.6380],[-122.1450,47.6400],[-122.1300,47.6440],[-122.1240,47.6570],[-122.1240,47.6720]]},
+ {n:"SR-167",cls:"fw",p:[[-122.2150,47.4780],[-122.2180,47.4600],[-122.2240,47.4400],[-122.2300,47.4200],[-122.2340,47.4000]]},
+ {n:"I-5",cls:"fw dim",p:[[-122.3300,47.7400],[-122.3250,47.7100],[-122.3300,47.6800],[-122.3250,47.6500],[-122.3200,47.6200],[-122.3180,47.5950],[-122.2900,47.5600],[-122.2800,47.5300],[-122.2750,47.5000],[-122.2900,47.4700],[-122.2960,47.4400],[-122.3010,47.4000]]},
+ {n:"Bel-Red Rd",cls:"ar",p:[[-122.1930,47.6180],[-122.1780,47.6240],[-122.1600,47.6280],[-122.1440,47.6320],[-122.1300,47.6400]]},
+ {n:"NE 8th St",cls:"ar",p:[[-122.2100,47.6175],[-122.1850,47.6175],[-122.1500,47.6170],[-122.1180,47.6170]]},
+ {n:"Bellevue Way",cls:"ar",p:[[-122.2020,47.5850],[-122.2030,47.5980],[-122.2022,47.6080],[-122.2025,47.6200],[-122.2028,47.6330]]},
+ {n:"Main St",cls:"ar",p:[[-122.2065,47.6103],[-122.1900,47.6103],[-122.1680,47.6105]]},
+ {n:"NE 24th",cls:"ar",p:[[-122.1930,47.6335],[-122.1600,47.6330],[-122.1300,47.6320]]},
+ {n:"156th Ave NE",cls:"ar",p:[[-122.1290,47.5900],[-122.1290,47.6100],[-122.1290,47.6300],[-122.1290,47.6560]]},
+ {n:"Factoria Blvd",cls:"ar",p:[[-122.1690,47.5820],[-122.1690,47.5680],[-122.1620,47.5540],[-122.1560,47.5360]]},
+ {n:"Lk WA Blvd",cls:"ar",p:[[-122.2050,47.6420],[-122.2010,47.6620],[-122.2050,47.6800],[-122.2010,47.7000]]},
+ {n:"Avondale",cls:"ar",p:[[-122.1240,47.6720],[-122.1160,47.6700],[-122.1080,47.6820],[-122.1040,47.6960]]}
+];
+const CITIES=[
+ {n:"SEATTLE",lat:47.6060,lon:-122.3320,s:13},
+ {n:"BELLEVUE",lat:47.5975,lon:-122.1585,s:14},
+ {n:"KIRKLAND",lat:47.6820,lon:-122.1980,s:11},
+ {n:"REDMOND",lat:47.6720,lon:-122.1350,s:11},
+ {n:"RENTON",lat:47.4880,lon:-122.2000,s:11},
+ {n:"KENT",lat:47.4300,lon:-122.2450,s:11},
+ {n:"ISSAQUAH",lat:47.5320,lon:-122.0400,s:10},
+ {n:"MERCER I.",lat:47.5700,lon:-122.2380,s:9},
+ {n:"NEWCASTLE",lat:47.5350,lon:-122.1620,s:9},
+ {n:"BOTHELL",lat:47.7280,lon:-122.2050,s:9},
+ {n:"SAMMAMISH",lat:47.6100,lon:-122.0300,s:9},
+ {n:"TUKWILA",lat:47.4620,lon:-122.2800,s:9}
+];
+
+/* ══════════════════════════════════════════════════════════════
+   4. STATE + HELPERS
+   ══════════════════════════════════════════════════════════════ */
+const S = { mode:"ALL", price:new Set(), cat:new Set(), sec:new Set(), q:"", selected:null };
+const $ = s => document.querySelector(s);
+const el = (t,c,h)=>{const e=document.createElement(t); if(c)e.className=c; if(h!==undefined)e.innerHTML=h; return e;};
+const esc = s => String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+
+/* Filters persist; sound never does — audio must always be an explicit per-visit choice. */
+function save(){ try{ localStorage.setItem("jtow", JSON.stringify({
+  mode:S.mode, price:[...S.price], cat:[...S.cat], sec:[...S.sec] })); }catch(e){} }
+function load(){ try{ const j=JSON.parse(localStorage.getItem("jtow")||"{}");
+  if(j.mode) S.mode=j.mode;
+  (j.price||[]).forEach(v=>S.price.add(+v));
+  (j.cat||[]).forEach(v=>S.cat.add(v));
+  (j.sec||[]).forEach(v=>S.sec.add(v));
+}catch(e){} }
+
+function visible(){
+  return R.filter(r=>{
+    if(S.mode==="FOOD" && r.drink) return false;
+    if(S.mode==="DRINK" && !r.drink) return false;
+    if(S.price.size && !S.price.has(r.price)) return false;
+    if(S.cat.size && !S.cat.has(r.cat)) return false;
+    if(S.sec.size && !S.sec.has(r.sec)) return false;
+    if(S.q){
+      const hay=(r.n+" "+r.addr+" "+r.d+" "+r.orders.join(" ")+" "+r.tags.join(" ")+" "+CAT[r.cat].name+" "+SECTOR[r.sec].name).toLowerCase();
+      if(hay.indexOf(S.q)<0) return false;
+    }
+    return true;
+  });
+}
+let toastT=null;
+function toast(msg){
+  const t=$("#toast"); t.textContent=msg; t.classList.add("show");
+  clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove("show"),2100);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   5. BUILD MAP SVG
+   ══════════════════════════════════════════════════════════════ */
+function buildMap(){
+  const svg=$("#mapsvg");
+  let g="";
+  g+=`<defs>
+    <linearGradient id="landG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0d1a16"/><stop offset="1" stop-color="#08110f"/>
+    </linearGradient>
+    <linearGradient id="waterG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#062533"/><stop offset="1" stop-color="#04161f"/>
+    </linearGradient>
+    <radialGradient id="glowC"><stop offset="0" stop-color="#3ad7ff" stop-opacity=".30"/><stop offset="1" stop-color="#3ad7ff" stop-opacity="0"/></radialGradient>
+    <radialGradient id="sweepG"><stop offset="0" stop-color="#5dff9f" stop-opacity=".0"/><stop offset=".72" stop-color="#5dff9f" stop-opacity=".022"/><stop offset="1" stop-color="#5dff9f" stop-opacity=".085"/></radialGradient>
+    <pattern id="hexP" width="34" height="59" patternUnits="userSpaceOnUse">
+      <path d="M17 0 L34 10 L34 30 L17 40 L0 30 L0 10 Z" fill="none" stroke="rgba(58,215,255,.055)" stroke-width="1"/>
+      <path d="M17 40 L34 50 M17 40 L0 50" fill="none" stroke="rgba(58,215,255,.055)" stroke-width="1"/>
+    </pattern>
+    <filter id="soft"><feGaussianBlur stdDeviation="3"/></filter>
+  </defs>`;
+
+  const NS='vector-effect="non-scaling-stroke"';
+  const T=(x,y,fs,fill,extra,txt)=>
+    `<text class="lab ${extra.cls||''}" data-fs="${fs}" x="${x.toFixed(1)}" y="${y.toFixed(1)}" font-size="${fs}" fill="${fill}" font-family="monospace"${extra.a?` text-anchor="${extra.a}"`:""}${extra.ls?` letter-spacing="${extra.ls}"`:""}${extra.w?` font-weight="${extra.w}"`:""}${extra.tr?` transform="${extra.tr}"`:""}>${txt}</text>`;
+
+  g+=`<rect x="0" y="0" width="${MW}" height="${MH}" fill="url(#landG)"/>`;
+  g+=`<rect x="0" y="0" width="${MW}" height="${MH}" fill="url(#hexP)"/>`;
+  // lat/lon graticule
+  for(let la=47.40; la<=47.7401; la+=0.05){
+    g+=`<line x1="0" y1="${PY(la).toFixed(1)}" x2="${MW}" y2="${PY(la).toFixed(1)}" stroke="rgba(58,215,255,.07)" stroke-width="1" ${NS}/>`;
+    g+=T(6,PY(la)-4,9,"rgba(58,215,255,.30)",{cls:"grat"},la.toFixed(2)+"N");
+  }
+  for(let lo=-122.40; lo<=-122.0001; lo+=0.05){
+    g+=`<line x1="${PX(lo).toFixed(1)}" y1="0" x2="${PX(lo).toFixed(1)}" y2="${MH}" stroke="rgba(58,215,255,.07)" stroke-width="1" ${NS}/>`;
+  }
+  // water
+  g+=`<path d="${path(SOUND,false)} L 0 ${MH} L 0 0 Z" fill="url(#waterG)" stroke="rgba(58,215,255,.32)" stroke-width="2" ${NS}/>`;
+  g+=`<path d="${path(SAMM_PLATEAU,true)}" fill="rgba(13,26,22,.6)" stroke="none"/>`;
+  g+=`<path d="${path(LAKE_WA,true)}" fill="url(#waterG)" stroke="rgba(58,215,255,.45)" stroke-width="2.2" ${NS}/>`;
+  g+=`<path d="${path(LAKE_SAM,true)}" fill="url(#waterG)" stroke="rgba(58,215,255,.45)" stroke-width="2.2" ${NS}/>`;
+  g+=`<path d="${path(MERCER,true)}" fill="url(#landG)" stroke="rgba(58,215,255,.4)" stroke-width="1.8" ${NS}/>`;
+  // roads
+  ROADS.forEach(rd=>{
+    const dp=path(rd.p,false);
+    if(rd.cls.indexOf("fw")===0){
+      const dim=rd.cls.indexOf("dim")>-1;
+      g+=`<path d="${dp}" fill="none" stroke="rgba(255,166,43,${dim?.09:.17})" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" ${NS}/>`;
+      g+=`<path d="${dp}" fill="none" stroke="rgba(255,166,43,${dim?.35:.82})" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" ${NS}/>`;
+    } else {
+      g+=`<path d="${dp}" fill="none" stroke="rgba(58,215,255,.32)" stroke-width="1.8" stroke-dasharray="8 6" stroke-linecap="round" ${NS}/>`;
+    }
+  });
+  // road labels
+  [["I-405",47.6900,-122.1840],["I-405",47.5250,-122.1830],["I-90",47.5910,-122.2900],["I-90",47.5860,-122.1200],
+   ["SR-520",47.6420,-122.2500],["SR-520",47.6395,-122.1550],["SR-167",47.4450,-122.2170],["I-5",47.6600,-122.3300],
+   ["BEL-RED RD",47.6310,-122.1500]
+  ].forEach(l=>{
+    g+=T(PX(l[2])+7,PY(l[1])-5,11,"rgba(255,166,43,.68)",{ls:1.2,cls:"road"},l[0]);
+  });
+  // fine street labels — only shown once zoomed in
+  [["NE 8TH ST",47.6178,-122.2010],["MAIN ST",47.6106,-122.2010],["BELLEVUE WAY",47.6265,-122.2033],
+   ["156TH AVE NE",47.6180,-122.1288],["FACTORIA BLVD",47.5740,-122.1688],["NE 24TH ST",47.6337,-122.1800],
+   ["AVONDALE WAY",47.6880,-122.1055],["120TH AVE NE",47.7050,-122.1795],["LAKE WA BLVD",47.6700,-122.2035]
+  ].forEach(l=>{
+    g+=T(PX(l[2])+7,PY(l[1])-5,10,"rgba(58,215,255,.75)",{ls:1.1,cls:"street"},l[0]);
+  });
+  // water labels
+  const rt=(lo,la,deg)=>`rotate(${deg} ${PX(lo).toFixed(1)} ${PY(la).toFixed(1)})`;
+  g+=T(PX(-122.2450),PY(47.6600),12,"rgba(58,215,255,.42)",{ls:2,tr:rt(-122.2450,47.6600,-78),cls:"water"},"LAKE WASHINGTON");
+  g+=T(PX(-122.1050),PY(47.6100),10,"rgba(58,215,255,.42)",{ls:1.6,tr:rt(-122.1050,47.6100,-80),cls:"water"},"LAKE SAMMAMISH");
+  g+=T(PX(-122.4050),PY(47.6900),11,"rgba(58,215,255,.32)",{ls:2,tr:rt(-122.4050,47.6900,-88),cls:"water"},"PUGET SOUND");
+  // cities
+  CITIES.forEach(c=>{
+    const main=c.s>=13;
+    g+=T(PX(c.lon),PY(c.lat),c.s+2,main?"rgba(255,208,138,.95)":"rgba(207,233,245,.44)",
+         {a:"middle",ls:main?3:2,w:main?"bold":"normal",cls:"city"},c.n);
+  });
+  // radar sweep
+  g+=`<g id="sweepG_" transform="translate(${PX(-122.2015).toFixed(1)},${PY(47.6101).toFixed(1)})">
+        <circle r="520" fill="url(#sweepG)"/>
+        <line x1="0" y1="0" x2="520" y2="0" stroke="rgba(93,255,159,.30)" stroke-width="1.5" ${NS}/>
+        <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="9s" repeatCount="indefinite" additive="sum"/>
+      </g>`;
+  // sector beacons (constant screen size)
+  const secPts={};
+  R.forEach(r=>{ (secPts[r.sec]=secPts[r.sec]||[]).push(r); });
+  Object.keys(secPts).forEach(k=>{
+    const list=secPts[k];
+    const cx=list.reduce((a,r)=>a+PX(r.lon),0)/list.length;
+    const cy=list.reduce((a,r)=>a+PY(r.lat),0)/list.length;
+    const rad=Math.max(26, 20+list.length*3.2);
+    g+=`<g class="cscale sector" data-cx="${cx.toFixed(1)}" data-cy="${cy.toFixed(1)}">
+      <circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${rad}" fill="url(#glowC)" stroke="rgba(93,255,159,.28)" stroke-width="1" stroke-dasharray="4 6"/></g>`;
+  });
+  // command star at Bellevue downtown (constant screen size)
+  const bx=PX(-122.2015), by=PY(47.6101);
+  g+=`<g class="cscale" data-cx="${bx.toFixed(1)}" data-cy="${by.toFixed(1)}" opacity=".85">
+    <circle cx="${bx.toFixed(1)}" cy="${by.toFixed(1)}" r="8" fill="none" stroke="#ffa62b" stroke-width="1.5"/>
+    <circle cx="${bx.toFixed(1)}" cy="${by.toFixed(1)}" r="16" fill="none" stroke="#ffa62b" stroke-width="1" stroke-dasharray="3 4" opacity=".6"/>
+    <line x1="${(bx-24).toFixed(1)}" y1="${by.toFixed(1)}" x2="${(bx-11).toFixed(1)}" y2="${by.toFixed(1)}" stroke="#ffa62b" stroke-width="1.4"/>
+    <line x1="${(bx+11).toFixed(1)}" y1="${by.toFixed(1)}" x2="${(bx+24).toFixed(1)}" y2="${by.toFixed(1)}" stroke="#ffa62b" stroke-width="1.4"/>
+    <line x1="${bx.toFixed(1)}" y1="${(by-24).toFixed(1)}" x2="${bx.toFixed(1)}" y2="${(by-11).toFixed(1)}" stroke="#ffa62b" stroke-width="1.4"/>
+    <line x1="${bx.toFixed(1)}" y1="${(by+11).toFixed(1)}" x2="${bx.toFixed(1)}" y2="${(by+24).toFixed(1)}" stroke="#ffa62b" stroke-width="1.4"/>
+  </g>`;
+  svg.innerHTML=g;
+  LABELS = svg.querySelectorAll(".lab");
+  SCALERS = svg.querySelectorAll(".cscale");
+}
+let LABELS=[], SCALERS=[];
+/* Keeps SVG text + marker glyphs at a constant on-screen size no matter the zoom.
+   An element of user-unit size s draws at s*(boxW/VB.w) px, so setting
+   s = base*K*(VB.w/MW) makes the drawn size base*K*(boxW/MW) — VB-independent. */
+const LABK = 1.9;
+function applyScales(){
+  const k = LABK * VB.w / MW;   // user-unit multiplier
+  const z = MW / VB.w;          // zoom level (1 = whole region)
+  for(const t of LABELS){
+    t.setAttribute("font-size",(parseFloat(t.dataset.fs)*k).toFixed(3));
+    const c=t.getAttribute("class")||"";
+    if(c.indexOf("city")>-1)        t.setAttribute("opacity", z>17?"0":(z>4.5?"0.30":"1"));
+    else if(c.indexOf("grat")>-1)   t.setAttribute("opacity", z>3.4?"0":"1");
+    else if(c.indexOf("water")>-1)  t.setAttribute("opacity", z>10?"0":"1");
+    else if(c.indexOf("street")>-1) t.setAttribute("opacity", z<3.2?"0":"1");
+    else if(c.indexOf("road")>-1)   t.setAttribute("opacity", z<1.2?"0.5":(z>14?"0.4":"1"));
+  }
+  for(const g of SCALERS){
+    const cx=+g.dataset.cx, cy=+g.dataset.cy;
+    g.setAttribute("transform",`translate(${cx},${cy}) scale(${k}) translate(${-cx},${-cy})`);
+    if((g.getAttribute("class")||"").indexOf("sector")>-1) g.setAttribute("opacity", z>7?"0":"1");
+  }
+  const sw=document.getElementById("sweepG_");
+  if(sw) sw.setAttribute("opacity", z>3.4?"0":"1");
+}
+
+/* ══════════════════════════════════════════════════════════════
+   6. VIEW / ZOOM / PINS
+   ══════════════════════════════════════════════════════════════ */
+const VIEWS={
+  REGION:   {lab:"◎ Full Region",  box:[B.lonMin,B.lonMax,B.latMin,B.latMax]},
+  EASTSIDE: {lab:"⬡ Eastside Core",box:[-122.265,-122.095,47.545,47.690]},
+  DOWNTOWN: {lab:"▣ Downtown BLV", box:[-122.2115,-122.1855,47.6060,47.6255]},
+  FACTORIA: {lab:"▣ Factoria",     box:[-122.1850,-122.1560,47.5660,47.5860]},
+  NORTH:    {lab:"▲ Kirk / Redmond",box:[-122.2100,-122.0850,47.6250,47.7300]},
+  SOUTH:    {lab:"▼ Renton / Kent",box:[-122.2750,-122.1750,47.4150,47.5150]}
+};
+let VB={x:0,y:0,w:MW,h:MH}, VBT={x:0,y:0,w:MW,h:MH}, anim=null, curView="EASTSIDE";
+let boxW=1,boxH=1;
+
+function fitBox(box){
+  const [lo1,lo2,la1,la2]=box;
+  let x=PX(lo1), x2=PX(lo2), y=PY(la2), y2=PY(la1);
+  let w=x2-x, h=y2-y;
+  const ar=boxW/boxH;
+  if(w/h < ar){ const nw=h*ar; x-=(nw-w)/2; w=nw; }
+  else { const nh=w/ar; y-=(nh-h)/2; h=nh; }
+  return {x,y,w,h};
+}
+function setView(k,quiet){
+  curView=k; VBT=fitBox(VIEWS[k].box);
+  if(!quiet) Audio8.sfx.zoom();
+  startAnim();
+  document.querySelectorAll("#mapctl .chip").forEach(c=>c.classList.toggle("on", c.dataset.v===k));
+}
+function startAnim(){
+  if(anim) cancelAnimationFrame(anim);
+  const t0=performance.now(), from={...VB}, dur=560;
+  const ease=t=>1-Math.pow(1-t,3);
+  (function frame(now){
+    const p=Math.min(1,(now-t0)/dur), e=ease(p);
+    VB={x:from.x+(VBT.x-from.x)*e, y:from.y+(VBT.y-from.y)*e, w:from.w+(VBT.w-from.w)*e, h:from.h+(VBT.h-from.h)*e};
+    applyVB();
+    if(p<1) anim=requestAnimationFrame(frame); else anim=null;
+  })(performance.now());
+}
+function applyVB(){
+  $("#mapsvg").setAttribute("viewBox",`${VB.x.toFixed(2)} ${VB.y.toFixed(2)} ${VB.w.toFixed(2)} ${VB.h.toFixed(2)}`);
+  applyScales();
+  renderPins();
+  const cLon=B.lonMin+((VB.x+VB.w/2)/MW)*(B.lonMax-B.lonMin);
+  const cLat=B.latMax-((VB.y+VB.h/2)/MH)*(B.latMax-B.latMin);
+  $("#coord").textContent=`${cLat.toFixed(4)}°N  ${Math.abs(cLon).toFixed(4)}°W  ·  ZOOM ${(MW/VB.w).toFixed(1)}×`;
+}
+function toScreen(lon,lat){
+  return { x:(PX(lon)-VB.x)/VB.w*boxW, y:(PY(lat)-VB.y)/VB.h*boxH };
+}
+
+function renderPins(){
+  const layer=$("#pinlayer"); if(!layer) return;
+  const vis=visible();
+  const pts=vis.map(r=>{ const s=toScreen(r.lon,r.lat); return {r,x:s.x,y:s.y}; })
+               .filter(p=>p.x>-40 && p.y>-40 && p.x<boxW+40 && p.y<boxH+40);
+  // greedy cluster
+  const TH=34, groups=[];
+  pts.forEach(p=>{
+    let g=null;
+    for(const q of groups){ if(Math.hypot(q.x-p.x,q.y-p.y)<TH){ g=q; break; } }
+    if(g){ g.items.push(p); g.x=(g.x*(g.items.length-1)+p.x)/g.items.length; g.y=(g.y*(g.items.length-1)+p.y)/g.items.length; }
+    else groups.push({x:p.x,y:p.y,items:[p]});
+  });
+  layer.innerHTML="";
+  groups.forEach(g=>{
+    if(g.items.length===1){
+      const p=g.items[0], c=CAT[p.r.cat].color;
+      const d=el("div","pin"+(S.selected===p.r.id?" sel":""));
+      d.style.cssText=`left:${p.x}px;top:${p.y}px;--c:${c}`;
+      d.innerHTML=`<span class="ring"></span><span class="dot"></span><span class="lbl">${esc(p.r.n)}</span>`;
+      d.addEventListener("mouseenter",()=>Audio8.sfx.hover());
+      d.addEventListener("click",e=>{e.stopPropagation(); select(p.r.id,true);});
+      layer.appendChild(d);
+    } else {
+      const d=el("div","cluster");
+      d.style.cssText=`left:${g.x}px;top:${g.y}px`;
+      d.innerHTML=`<span>${g.items.length}<small>TARGETS</small></span>`;
+      d.title=g.items.map(i=>i.r.n).join(" · ");
+      d.addEventListener("mouseenter",()=>Audio8.sfx.hover());
+      d.addEventListener("click",e=>{
+        e.stopPropagation(); Audio8.sfx.zoom();
+        const lons=g.items.map(i=>i.r.lon), lats=g.items.map(i=>i.r.lat);
+        const pad=0.0045;
+        VBT=fitBox([Math.min(...lons)-pad,Math.max(...lons)+pad,Math.min(...lats)-pad,Math.max(...lats)+pad]);
+        if(VBT.w<40){ const cx=VBT.x+VBT.w/2, cy=VBT.y+VBT.h/2, k=40/VBT.w;
+          VBT={x:cx-VBT.w*k/2,y:cy-VBT.h*k/2,w:VBT.w*k,h:VBT.h*k}; }
+        document.querySelectorAll("#mapctl .chip").forEach(c=>c.classList.remove("on"));
+        startAnim();
+      });
+      layer.appendChild(d);
+    }
+  });
+}
+
+/* pan + wheel zoom */
+function wireMapGestures(){
+  const svg=$("#mapsvg");
+  let dragging=false,sx=0,sy=0,ox=0,oy=0,moved=false;
+  svg.addEventListener("pointerdown",e=>{
+    dragging=true;moved=false;sx=e.clientX;sy=e.clientY;ox=VB.x;oy=VB.y;
+    svg.classList.add("drag");svg.setPointerCapture(e.pointerId);
+    if(anim){cancelAnimationFrame(anim);anim=null;}
+  });
+  svg.addEventListener("pointermove",e=>{
+    if(!dragging)return;
+    const dx=(e.clientX-sx)/boxW*VB.w, dy=(e.clientY-sy)/boxH*VB.h;
+    if(Math.abs(e.clientX-sx)+Math.abs(e.clientY-sy)>4) moved=true;
+    VB.x=ox-dx; VB.y=oy-dy; VBT={...VB}; applyVB();
+  });
+  const up=e=>{ dragging=false; svg.classList.remove("drag"); };
+  svg.addEventListener("pointerup",up); svg.addEventListener("pointercancel",up);
+  svg.addEventListener("wheel",e=>{
+    e.preventDefault();
+    if(anim){cancelAnimationFrame(anim);anim=null;}
+    const rect=svg.getBoundingClientRect();
+    const mx=(e.clientX-rect.left)/rect.width, my=(e.clientY-rect.top)/rect.height;
+    const k=e.deltaY>0?1.16:1/1.16;
+    let nw=VB.w*k, nh=VB.h*k;
+    nw=Math.min(MW*1.5,Math.max(16,nw)); nh=nw*(boxH/boxW);
+    VB.x+=(VB.w-nw)*mx; VB.y+=(VB.h-nh)*my; VB.w=nw; VB.h=nh;
+    VBT={...VB}; applyVB();
+  },{passive:false});
+}
+
+/* ══════════════════════════════════════════════════════════════
+   7. UI RENDER
+   ══════════════════════════════════════════════════════════════ */
+function chip(label,on,extra){
+  const c=el("button","chip"+(on?" on":""));
+  c.innerHTML=label; if(extra) Object.assign(c.dataset,extra);
+  c.addEventListener("mouseenter",()=>Audio8.sfx.hover());
+  return c;
+}
+function buildFilters(){
+  // mode
+  const fm=$("#fMode"); fm.innerHTML="";
+  [["ALL","All Supply"],["FOOD","Food"],["DRINK","Drinks"]].forEach(([k,l])=>{
+    const c=chip(l,S.mode===k); c.classList.add("big");
+    c.onclick=()=>{ Audio8.sfx.toggle(true); S.mode=k; render(); };
+    fm.appendChild(c);
+  });
+  // price
+  const fp=$("#fPrice"); fp.innerHTML="";
+  [1,2,3].forEach(p=>{
+    const n=R.filter(r=>r.price===p).length;
+    const c=chip(`<span style="color:inherit;font-weight:700">${PRICE_LABEL[p]}</span> ${PRICE_DESC[p]} <span class="n">${n}</span>`,S.price.has(p));
+    c.onclick=()=>{ const on=S.price.has(p); Audio8.sfx.toggle(!on); on?S.price.delete(p):S.price.add(p); render(); };
+    fp.appendChild(c);
+  });
+  // category
+  const fc=$("#fCat"); fc.innerHTML="";
+  Object.keys(CAT).forEach(k=>{
+    const n=R.filter(r=>r.cat===k).length;
+    const c=chip(`<span class="sw" style="color:${CAT[k].color};background:${CAT[k].color}"></span>${CAT[k].name} <span class="n">${n}</span>`,S.cat.has(k));
+    c.onclick=()=>{ const on=S.cat.has(k); Audio8.sfx.toggle(!on); on?S.cat.delete(k):S.cat.add(k); render(); };
+    fc.appendChild(c);
+  });
+  // sector
+  const fs=$("#fSector"); fs.innerHTML="";
+  Object.keys(SECTOR).forEach(k=>{
+    const n=R.filter(r=>r.sec===k).length;
+    const c=chip(`${SECTOR[k].name} <span class="n">${n}</span>`,S.sec.has(k));
+    c.onclick=()=>{ const on=S.sec.has(k); Audio8.sfx.toggle(!on); on?S.sec.delete(k):S.sec.add(k);
+      if(!on){ const map={DT:"DOWNTOWN",FAC:"FACTORIA",BR:"EASTSIDE",KIRK:"NORTH",RED:"NORTH",REN:"SOUTH",KENT:"SOUTH"};
+        if(S.sec.size===1 && map[k]) setView(map[k],true); }
+      render(); };
+    fs.appendChild(c);
+  });
+  // map controls
+  const mc=$("#mapctl"); mc.innerHTML="";
+  Object.keys(VIEWS).forEach(k=>{
+    const c=chip(VIEWS[k].lab,curView===k,{v:k});
+    c.onclick=()=>setView(k);
+    mc.appendChild(c);
+  });
+  // legend
+  const lg=$("#legend"); lg.innerHTML=Object.keys(CAT).map(k=>
+    `<span><i style="color:${CAT[k].color}"></i>${CAT[k].name}</span>`).join("");
+}
+
+function renderGrid(){
+  const g=$("#grid"), vis=visible();
+  g.innerHTML="";
+  $("#rCount").textContent=vis.length;
+  $("#rosterCount").textContent=`— ${vis.length} of ${R.length} showing`;
+  if(!vis.length){
+    g.appendChild(el("div","noresult","⚠ No targets match current filters<br>Insufficient vespene gas. Loosen your parameters, Professor."));
+    if(!renderGrid._wasEmpty) Audio8.sfx.deny();
+    renderGrid._wasEmpty=true;
+    return;
+  }
+  renderGrid._wasEmpty=false;
+  vis.forEach((r,i)=>{
+    const c=el("div","card"+(S.selected===r.id?" sel":""));
+    c.style.setProperty("--c",CAT[r.cat].color);
+    c.innerHTML=`
+      <span class="idx">${String(i+1).padStart(2,"0")}</span>
+      <div class="ct">${esc(CAT[r.cat].name)}</div>
+      <h3>${esc(r.n)}</h3>
+      <div class="meta">
+        <span class="pr">${PRICE_LABEL[r.price]}</span>
+        <span>${esc(SECTOR[r.sec].name)}</span>
+        <span>${esc(SECTOR[r.sec].drive)}</span>
+      </div>
+      <p>${esc(r.d)}</p>`;
+    c.addEventListener("mouseenter",()=>Audio8.sfx.hover());
+    c.addEventListener("click",()=>select(r.id,false));
+    g.appendChild(c);
+  });
+}
+
+function renderDossier(){
+  const d=$("#dossier"), a=$("#dactions");
+  const r=R.find(x=>x.id===S.selected);
+  if(!r){
+    a.style.display="none";
+    d.innerHTML=`<div class="empty">
+      <svg width="76" height="76" viewBox="0 0 100 100" fill="none" stroke="#3ad7ff" stroke-width="2">
+        <circle cx="50" cy="50" r="34"/><circle cx="50" cy="50" r="16" stroke-dasharray="4 5"/>
+        <path d="M50 4v14M50 82v14M4 50h14M82 50h14"/>
+      </svg>
+      Select a target<br>on the map or roster<br><span style="color:#ffa62b">awaiting orders, professor</span></div>`;
+    return;
+  }
+  const c=CAT[r.cat].color;
+  a.style.display="flex";
+  const q=encodeURIComponent(r.n+" "+r.addr);
+  a.innerHTML=`
+    <a class="abtn amber" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${q}">⌖ Open in Maps</a>
+    <a class="abtn" target="_blank" rel="noopener" href="https://www.google.com/search?q=${q}+menu+hours">⌗ Menu &amp; Hours</a>`;
+  a.querySelectorAll(".abtn").forEach(b=>{
+    b.addEventListener("mouseenter",()=>Audio8.sfx.hover());
+    b.addEventListener("click",()=>Audio8.sfx.click());
+  });
+  d.style.setProperty("--c",c);
+  d.innerHTML=`
+    <div class="d-cat" style="color:${c}">▸ ${esc(CAT[r.cat].name)} &nbsp;//&nbsp; Sector ${esc(SECTOR[r.sec].name)}</div>
+    <div class="d-name">${esc(r.n)}</div>
+    <div class="d-sub">⌖ ${esc(r.addr)}</div>
+    <div class="d-stats">
+      <div class="d-stat"><div class="k">Cost</div><div class="v money">${PRICE_LABEL[r.price]} · ${PRICE_DESC[r.price]}</div>
+        <div class="bar"><i style="width:${r.price/3*100}%"></i></div></div>
+      <div class="d-stat"><div class="k">Travel</div><div class="v">${esc(SECTOR[r.sec].drive)}</div>
+        <div class="bar"><i style="width:${Math.min(100,({DT:8,FAC:32,BR:36,KIRK:60,RED:72,REN:72,KENT:100})[r.sec])}%"></i></div></div>
+      <div class="d-stat"><div class="k">Supply</div><div class="v">${r.drink?"Drinks":"Food"}</div></div>
+      <div class="d-stat"><div class="k">Grid Ref</div><div class="v" style="font-size:11px;font-family:var(--mono)">${r.lat.toFixed(4)}N<br>${Math.abs(r.lon).toFixed(4)}W</div></div>
+    </div>
+    <div class="d-body">${esc(r.d)}</div>
+    <div class="d-sec">
+      <h4>Recommended Loadout</h4>
+      <ul class="orders">${r.orders.map(o=>`<li>▸ ${esc(o)}</li>`).join("")}</ul>
+    </div>
+    <div class="d-sec">
+      <h4>Attributes</h4>
+      <div class="tagrow">${r.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join("")}</div>
+    </div>
+    <div class="d-sec">
+      <h4>Field Intel</h4>
+      <div class="intel">${esc(r.intel)}</div>
+    </div>`;
+}
+
+function select(id,fromMap){
+  const same=S.selected===id;
+  S.selected = same ? null : id;
+  if(!same) Audio8.sfx.select(); else Audio8.sfx.click();
+  const r=R.find(x=>x.id===S.selected);
+  if(r && fromMap===false){
+    // selected from the roster — fly the map to it
+    let w=VB.w,h=VB.h;
+    if(w>300){ w=260; h=w*(boxH/boxW); }
+    VBT={x:PX(r.lon)-w/2,y:PY(r.lat)-h/2,w,h};
+    document.querySelectorAll("#mapctl .chip").forEach(c=>c.classList.remove("on"));
+    startAnim();
+  }
+  if(r) toast("Target acquired: "+r.n);
+  renderPins(); renderGrid(); renderDossier();
+}
+
+function render(){ buildFilters(); renderGrid(); renderPins(); renderDossier(); save(); }
+
+/* ══════════════════════════════════════════════════════════════
+   8. BOOT + WIRING
+   ══════════════════════════════════════════════════════════════ */
+const NR=R.length, NSEC=Object.keys(SECTOR).length, NCAT=Object.keys(CAT).length;
+const GREETS=[
+  `▸ IDENTITY CONFIRMED: <b>PROFESSOR JIMMY BINH LE</b>. Welcome to the Eastside, Professor. ${NR} culinary targets are online across ${NSEC} sectors, all within a short hop of the Bellevue command hub. Filter by cost or unit type, click any marker for a full dossier. Your appetite is the only limiting resource.`,
+  `▸ COMMAND LINK ESTABLISHED. Good to have you on the grid, <b>PROFESSOR LE</b>. All ${NR} targets on this map have been personally scouted. Downtown Bellevue is the staging ground — Kent is the furthest deployment at roughly 25 minutes, and it now holds three targets within 200 metres of each other. Choose wisely.`,
+  `▸ TACTICAL DISPLAY ONLINE. <b>PROFESSOR LE</b> — ${NR} targets, ${NCAT} unit types, 3 cost tiers. Recommendation: begin with the dumpling corridor downtown, then push south to Factoria. Reinforcements (boba) available at every stage.`
+];
+function typeLog(lines,done){
+  const box=$("#bootlog"); box.innerHTML="";
+  let i=0;
+  (function next(){
+    if(i>=lines.length){ setTimeout(done,320); return; }
+    const d=el("div",null,lines[i]); box.appendChild(d); i++;
+    setTimeout(next, 165);
+  })();
+}
+let appStarted=false;
+async function startApp(sound){
+  if(appStarted) return;
+  appStarted=true;
+  const b=$("#boot");
+  // Dismiss the overlay FIRST. Nothing about audio may ever strand the visitor here.
+  b.classList.add("gone");
+  setTimeout(()=>{ b.style.display="none"; },700);
+  $("#greet").innerHTML=GREETS[Math.floor(Math.random()*GREETS.length)];
+  measure();
+  try{
+    Audio8.init();
+    if(sound){
+      // ramp master up FIRST so the boot chime is audible, then drop the music in
+      const ok=await Audio8.on(1.45);
+      setSndUI(!!ok);
+      if(ok) Audio8.sfx.boot();
+    } else setSndUI(false);
+  }catch(e){ console.warn("Audio startup failed:",e); setSndUI(false); }
+}
+function setSndUI(on){
+  const b=$("#sndBtn");
+  b.classList.toggle("on",on);
+  b.setAttribute("aria-pressed",String(on));
+  $("#sndTxt").textContent = on ? "Sound On" : "Sound Off";
+}
+
+function measure(){
+  const r=$("#mapbox").getBoundingClientRect();
+  const ow=boxW, oh=boxH;
+  boxW=Math.max(1,r.width); boxH=Math.max(1,r.height);
+  if(ow!==boxW||oh!==boxH){
+    // refit current view target
+    VBT=fitBox(VIEWS[curView]&&curView?VIEWS[curView].box:VIEWS.EASTSIDE.box);
+    VB={...VBT}; applyVB();
+  }
+}
+
+function init(){
+  load();
+  // every visible count comes from the data — nothing hardcoded, nothing to go stale
+  document.querySelectorAll("[data-count]").forEach(n=>{ n.textContent=NR; });
+  $("#secCount").textContent=NSEC;
+  buildMap();
+  const r=$("#mapbox").getBoundingClientRect();
+  boxW=Math.max(1,r.width); boxH=Math.max(1,r.height);
+  VB=VBT=fitBox(VIEWS.EASTSIDE.box);
+  applyVB();
+  wireMapGestures();
+  render();
+
+  $("#search").addEventListener("input",e=>{ S.q=e.target.value.trim().toLowerCase(); renderGrid(); renderPins(); });
+  $("#reset").addEventListener("click",()=>{
+    Audio8.sfx.click();
+    S.mode="ALL"; S.price.clear(); S.cat.clear(); S.sec.clear(); S.q=""; S.selected=null;
+    $("#search").value=""; setView("EASTSIDE",true); render(); toast("All filters cleared");
+  });
+  $("#reset").addEventListener("mouseenter",()=>Audio8.sfx.hover());
+  $("#sndBtn").addEventListener("click",async()=>{
+    try{
+      if(Audio8.isOn()){ Audio8.off(); setSndUI(false); toast("Audio systems offline"); }
+      else {
+        const ok=await Audio8.on();
+        setSndUI(!!ok);
+        if(ok){ Audio8.sfx.select(); toast("Audio systems online"); }
+        else toast("Audio unavailable in this browser");
+      }
+    }catch(e){ console.warn("Audio toggle failed:",e); setSndUI(false); toast("Audio unavailable in this browser"); }
+    save();
+  });
+  $("#sndBtn").addEventListener("mouseenter",()=>Audio8.sfx.hover());
+  $("#mapsvg").addEventListener("click",()=>{ if(S.selected){ S.selected=null; Audio8.sfx.click(); renderPins(); renderGrid(); renderDossier(); } });
+
+  document.addEventListener("keydown",e=>{
+    if(e.key==="Escape" && S.selected){ S.selected=null; render(); }
+  });
+
+  if(window.ResizeObserver){ new ResizeObserver(measure).observe($("#mapbox")); }
+  window.addEventListener("resize",measure);
+
+  typeLog([
+    "&gt; INITIALIZING TACTICAL UPLINK ........ <span class='ok'>OK</span>",
+    "&gt; LOADING SECTOR MAP [PUGET SOUND EAST]  <span class='ok'>OK</span>",
+    `&gt; SCANNING FOR CULINARY SIGNATURES ....  <b>${NR} FOUND</b>`,
+    "&gt; CROSS-REFERENCING COST &amp; UNIT TYPE ..  <span class='ok'>OK</span>",
+    "&gt; COMMANDER PROFILE ....................  <b>PROFESSOR LE</b>",
+    "&gt; ALL SYSTEMS NOMINAL. <span class='blink'>▌</span>"
+  ], ()=>{});
+
+  $("#engage").addEventListener("click",()=>startApp(true));
+  $("#silent").addEventListener("click",()=>startApp(false));
+  $("#engage").addEventListener("mouseenter",()=>{ Audio8.init(); });
+}
+if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",init);
+else init();
+</script>
+</body>
+</html>
